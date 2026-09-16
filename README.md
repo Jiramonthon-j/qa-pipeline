@@ -16,23 +16,23 @@ Repository นี้เผยแพร่เฉพาะส่วน `skills/` (
 
 ```
 .
-└── skills/                          # นิยาม Skill ทั้ง 15 ตัว (ตัว Pipeline framework — ใช้ซ้ำได้กับทุก Feature)
-    ├── source-ingest/
-    ├── test-plan/
-    ├── requirement-review/
-    ├── e2e-flow-designer/
-    ├── test-case-generator/
-    ├── coverage-review/
-    ├── risk-analysis/
-    ├── test-data-generator/
-    ├── qa-automation-script/
-    ├── result-analysis/
-    ├── qa-reconcile/
-    ├── qa-report-generator/
-    ├── redmine-logging/
-    ├── qa-retest/
-    ├── qa-retest-closure/
-    └── _shared/                     # โมดูลที่ใช้ร่วมกันหลาย Skill
+└── skills/                              # นิยาม Skill ทั้ง 15 ตัว เรียงตามลำดับ Flow จริง
+    ├── 00-pre-source-ingest/
+    ├── 00-test-plan/
+    ├── 01-requirement-review/
+    ├── 02-e2e-flow-designer/
+    ├── 03-test-case-generator/
+    ├── 04-coverage-review/
+    ├── 05-risk-analysis/
+    ├── 06-test-data-generator/
+    ├── 06a-qa-automation-script/
+    ├── 07-result-analysis/
+    ├── 07a-RTM-qa-reconcile/
+    ├── 08-qa-report-generator/
+    ├── 09-redmine-logging/
+    ├── 10-qa-retest/
+    ├── 10a-qa-retest-closure/
+    └── _shared/                         # โมดูลที่ใช้ร่วมกันหลาย Skill (ไม่ใช่ Stage ในสาย Flow)
 ```
 
 ตัวอย่างการรันจริงครบทุก Stage (case study เช่น "Discount Code Application" ที่ผ่าน Redmine จริง) จะถูกเพิ่มเข้ามาเป็นโฟลเดอร์แยกในภายหลัง เมื่อผลการรันชุดล่าสุดพร้อม
@@ -127,21 +127,21 @@ flowchart TD
 
 | Stage | Skill | หน้าที่ | ข้อมูลนำเข้า | ผลลัพธ์ | ประเภท |
 |---|---|---|---|---|---|
-| 00-pre | `source-ingest` | รวบรวมแหล่งข้อมูลต้นทาง (สเปก, chat log, บันทึกประชุม) สรุปเป็นชุดเดียว พร้อมชี้จุดขัดแย้ง/ช่องว่าง | ไฟล์ต้นฉบับดิบจากผู้ใช้ | `00-pre-source-ingest.md` | ต้องอนุมัติ |
-| 00 | `test-plan` | วางแผนทดสอบ: ขอบเขต, Exit Criteria, Environment, ตารางเวลา, ความเสี่ยง | ผลจาก 00-pre, กำหนดการจริง | `testplans/TP-*.md` | ต้องอนุมัติ |
-| 01 | `requirement-review` | สกัด Business Rule และ Open Question จาก Requirement ต้นทาง | 00-pre, 00 | `01-requirement-review.md` | อัตโนมัติ |
-| 02 | `e2e-flow-designer` | ออกแบบ User Flow ทั้งหมดจาก Business Rule | 01 | `02-e2e-flow.md` | อัตโนมัติ |
-| 03 | `test-case-generator` | สร้าง Test Case ครอบคลุมทุก Business Rule และ Flow | 01, 02, ค่า Environment/Config จริง | `03-test-case-workbook.xlsx` | อัตโนมัติ |
-| 04 | `coverage-review` | ตรวจสอบความครบถ้วนของ Test Case เทียบกับ Requirement | Workbook (03) เทียบ 01+02 | `04-coverage-review.md` | อัตโนมัติ |
-| 05 | `risk-analysis` | กำหนด Priority (P0–P3) ให้ทุก Test Case | Workbook (03) | `05-risk-analysis.md` | อัตโนมัติ |
-| 06 | `test-data-generator` | แปลง Test Data ให้เป็นข้อมูลที่ใช้ทดสอบได้จริง | Workbook (03) | `06-test-data.md` | อัตโนมัติ |
-| 06a | `qa-automation-script` | เขียนและรัน Automation จริงต่อ Environment จริง บันทึกผลและภาพหลักฐาน | Workbook (03), 06, Environment ที่ใช้งานได้จริง | `automation/*`, `screenshots/*`, ผลใน Workbook | อัตโนมัติ |
-| 07 | `result-analysis` | สรุปผลรวมและวิเคราะห์ Root Cause ของ Fail/Blocked | Workbook หลัง 06a | `07-result-analysis.docx`, `07-photo-evidence.docx` | อัตโนมัติ |
-| RTM | `qa-reconcile` | คำนวณ Requirement Traceability Matrix ใหม่จากข้อมูลจริงเสมอ | 01, 02, Workbook (03) | `RTM-traceability-matrix.xlsx` | อัตโนมัติ |
-| 08 | `qa-report-generator` | รวมผลทั้งหมดเป็นรายงานสรุป Go / Conditional Go / No-Go | 07, RTM, Workbook, Deadline | `08-qa-report.docx` | ต้องลงนาม |
-| 09 | `redmine-logging` | เปิด Ticket ใน Redmine ให้ทุกเคสที่ Fail พร้อมแนบหลักฐานและแจ้ง Dev | Workbook (เคส Fail), อีเมล Dev | Ticket ใน Redmine, `09-redmine-log.md` | อัตโนมัติ* |
-| 10 | `qa-retest` | รัน Automation ซ้ำหลัง Dev แก้ไข เทียบผลใหม่ | Workbook (เคสที่มี Issue link) | `10-retest-run-result.json`, ผลใน Workbook | อัตโนมัติ* |
-| 10a | `qa-retest-closure` | ปิด Ticket (กรณี Pass) หรือคอมเมนต์แจ้งผล (กรณี Fail) กลับ Redmine | ผล Retest จาก 10 | `10a-closure-result.json`, สถานะ Ticket อัปเดต | อัตโนมัติ* |
+| 00-pre | `00-pre-source-ingest` | รวบรวมแหล่งข้อมูลต้นทาง (สเปก, chat log, บันทึกประชุม) สรุปเป็นชุดเดียว พร้อมชี้จุดขัดแย้ง/ช่องว่าง | ไฟล์ต้นฉบับดิบจากผู้ใช้ | `00-pre-source-ingest.md` | ต้องอนุมัติ |
+| 00 | `00-test-plan` | วางแผนทดสอบ: ขอบเขต, Exit Criteria, Environment, ตารางเวลา, ความเสี่ยง | ผลจาก 00-pre, กำหนดการจริง | `testplans/TP-*.md` | ต้องอนุมัติ |
+| 01 | `01-requirement-review` | สกัด Business Rule และ Open Question จาก Requirement ต้นทาง | 00-pre, 00 | `01-requirement-review.md` | อัตโนมัติ |
+| 02 | `02-e2e-flow-designer` | ออกแบบ User Flow ทั้งหมดจาก Business Rule | 01 | `02-e2e-flow.md` | อัตโนมัติ |
+| 03 | `03-test-case-generator` | สร้าง Test Case ครอบคลุมทุก Business Rule และ Flow | 01, 02, ค่า Environment/Config จริง | `03-test-case-workbook.xlsx` | อัตโนมัติ |
+| 04 | `04-coverage-review` | ตรวจสอบความครบถ้วนของ Test Case เทียบกับ Requirement | Workbook (03) เทียบ 01+02 | `04-coverage-review.md` | อัตโนมัติ |
+| 05 | `05-risk-analysis` | กำหนด Priority (P0–P3) ให้ทุก Test Case | Workbook (03) | `05-risk-analysis.md` | อัตโนมัติ |
+| 06 | `06-test-data-generator` | แปลง Test Data ให้เป็นข้อมูลที่ใช้ทดสอบได้จริง | Workbook (03) | `06-test-data.md` | อัตโนมัติ |
+| 06a | `06a-qa-automation-script` | เขียนและรัน Automation จริงต่อ Environment จริง บันทึกผลและภาพหลักฐาน | Workbook (03), 06, Environment ที่ใช้งานได้จริง | `automation/*`, `screenshots/*`, ผลใน Workbook | อัตโนมัติ |
+| 07 | `07-result-analysis` | สรุปผลรวมและวิเคราะห์ Root Cause ของ Fail/Blocked | Workbook หลัง 06a | `07-result-analysis.docx`, `07-photo-evidence.docx` | อัตโนมัติ |
+| RTM | `07a-RTM-qa-reconcile` | คำนวณ Requirement Traceability Matrix ใหม่จากข้อมูลจริงเสมอ | 01, 02, Workbook (03) | `RTM-traceability-matrix.xlsx` | อัตโนมัติ |
+| 08 | `08-qa-report-generator` | รวมผลทั้งหมดเป็นรายงานสรุป Go / Conditional Go / No-Go | 07, RTM, Workbook, Deadline | `08-qa-report.docx` | ต้องลงนาม |
+| 09 | `09-redmine-logging` | เปิด Ticket ใน Redmine ให้ทุกเคสที่ Fail พร้อมแนบหลักฐานและแจ้ง Dev | Workbook (เคส Fail), อีเมล Dev | Ticket ใน Redmine, `09-redmine-log.md` | อัตโนมัติ* |
+| 10 | `10-qa-retest` | รัน Automation ซ้ำหลัง Dev แก้ไข เทียบผลใหม่ | Workbook (เคสที่มี Issue link) | `10-retest-run-result.json`, ผลใน Workbook | อัตโนมัติ* |
+| 10a | `10a-qa-retest-closure` | ปิด Ticket (กรณี Pass) หรือคอมเมนต์แจ้งผล (กรณี Fail) กลับ Redmine | ผล Retest จาก 10 | `10a-closure-result.json`, สถานะ Ticket อัปเดต | อัตโนมัติ* |
 
 \* Stage 09, 10 และ 10a ทำงานอัตโนมัติได้ทั้งหมด แต่ต้องรับข้อมูลรับรอง (Redmine URL / API Key) ใหม่จากผู้ใช้ทุกครั้งที่รัน ดู [การจัดการข้อมูลรับรองความปลอดภัย](#การจัดการข้อมูลรับรองความปลอดภัย)
 
