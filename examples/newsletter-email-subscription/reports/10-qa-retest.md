@@ -31,13 +31,13 @@ credential/Redmine) ทั้งก่อนและหลังผู้ใช
 > Test Data เดิม (dup02@example.com / Dup02@Example.com) ยังใช้ทดสอบซ้ำได้เลย ไม่ต้องเปลี่ยนค่าใหม่
 > รบกวน QA ช่วย Retest ให้หน่อยครับ
 
-**สกรีนช็อตหน้า Ticket จริงหลังอัปเดต** (เก็บถาวรไว้ที่ `10-qa-retest-screenshots/` เพื่อเป็นหลักฐานที่ไม่
+**สกรีนช็อตหน้า Ticket จริงหลังอัปเดต** (เก็บถาวรไว้ที่ `../evidence/10-qa-retest/` เพื่อเป็นหลักฐานที่ไม่
 ขึ้นกับว่า Planio instance นี้ยังใช้งานได้อยู่ไหมในอนาคต เช่นกรณี free trial หมดอายุ — เหตุผลเดียวกับที่ทำใน
 Skill 09):
 
 | ไฟล์ | เนื้อหา |
 |---|---|
-| [`01-ticket-resolved-dev-comment.png`](./10-qa-retest-screenshots/01-ticket-resolved-dev-comment.png) | Ticket #9 หลังอัปเดตจริง — สถานะเปลี่ยนจาก `Open` เป็น `Resolved` พร้อมคอมเมนต์ Dev (Root Cause/Fix/Test Data) ตามเนื้อหาด้านบนเป๊ะๆ |
+| [`01-ticket-resolved-dev-comment.png`](../evidence/10-qa-retest/01-ticket-resolved-dev-comment.png) | Ticket #9 หลังอัปเดตจริง — สถานะเปลี่ยนจาก `Open` เป็น `Resolved` พร้อมคอมเมนต์ Dev (Root Cause/Fix/Test Data) ตามเนื้อหาด้านบนเป๊ะๆ |
 
 → TC-005 จัดอยู่ในกลุ่ม `ready`
 
@@ -54,7 +54,7 @@ Comment ของ Dev ระบุชัดเจนว่าแก้ที่ 
 ไม่มีเคสกรณี (B) ในรอบนี้ — ข้ามขั้นตอนนี้ทั้งหมดตามกฎของ Skill (TC-005 เป็นกรณี A)
 
 เพื่อให้ Automation รันกับระบบที่ "แก้ไขแล้วจริง" (ไม่ใช่แค่ mock ผลลัพธ์) จึงแก้บั๊กจริงใน
-`demo-app/server.py` ให้ตรงกับที่ Dev อธิบายในคอมเมนต์ — ฟังก์ชัน `subscribe()` เปลี่ยนจากเทียบอีเมล
+`automation/demo-app/server.py` ให้ตรงกับที่ Dev อธิบายในคอมเมนต์ — ฟังก์ชัน `subscribe()` เปลี่ยนจากเทียบอีเมล
 ซ้ำแบบ exact-match เป็น case-insensitive (`cleaned.lower() == existing.lower()`) เพื่อให้ Playwright
 รันเจอผล Pass/Fail จริงจากระบบจริงเหมือนทุก Stage ที่ผ่านมา ไม่ใช่ hardcode ผลไว้ล่วงหน้า
 
@@ -63,17 +63,17 @@ Comment ของ Dev ระบุชัดเจนว่าแก้ที่ 
 - **Browser**: รันเฉพาะ **Chromium** เท่านั้น (environment นี้ยังไม่มี Safari/Firefox/Edge ติดตั้งอยู่ ข้อจำกัด
   เดียวกับ Stage 06a/07 — ยังไม่ปิด OQ-03)
 - เก็บ Screenshot เดิม (ผล Fail ก่อน Retest) ไว้ที่
-  [`screenshots/Chromium/_history/TC-005_2026-09-19-pre-retest.png`](./screenshots/Chromium/_history/TC-005_2026-09-19-pre-retest.png)
+  [`../evidence/06a-automation/_history/TC-005_2026-09-19-pre-retest.png`](../evidence/06a-automation/_history/TC-005_2026-09-19-pre-retest.png)
   ก่อนรันทับ
 - รันด้วย runner กลางตัวเดียวกับ Skill 06a (`run_automation.py --tc TC-005 --browser chromium`)
 
 **ผลลัพธ์**: `Pass` — ระบบแสดง error `"อีเมลนี้สมัครรับข่าวสารไปแล้ว"` แบบ inline ถูกต้องเมื่อกรอก
 `Dup02@Example.com` ซ้ำกับ `dup02@example.com` ที่สมัครไปแล้ว (ดูภาพ
-[`screenshots/Chromium/TC-005.png`](./screenshots/Chromium/TC-005.png) — วงเขียวรอบข้อความ error ที่ถูกต้องแล้ว)
+[`../evidence/06a-automation/TC-005.png`](../evidence/06a-automation/TC-005.png) — วงเขียวรอบข้อความ error ที่ถูกต้องแล้ว)
 
 ## ขั้นตอนที่ 6 — บันทึกผลกลับ Workbook
 
-อัปเดต `03-test-case-workbook.xlsx` ด้วย `qa_workbook.py update-fields-batch` ครั้งเดียว (Document
+อัปเดต `../workbook/03-test-case-workbook.xlsx` ด้วย `qa_workbook.py update-fields-batch` ครั้งเดียว (Document
 Control Version History เป็น **Version 6**, Editor: `qa-retest`):
 
 | คอลัมน์ | ค่าเดิม | ค่าใหม่ |
@@ -82,7 +82,7 @@ Control Version History เป็น **Version 6**, Editor: `qa-retest`):
 | Actual Result | (ผล Fail จาก 06a) | ผล Pass พร้อมอ้างอิง Ticket #9 |
 | Remarks | — | Retest ผ่านหลัง Dev แก้ไข Ticket #9 (Resolved) — same_data |
 | Execution Date | 2026-09-19 (06a) | 2026-09-19 (Retest) |
-| Test Photo | `screenshots/Chromium/TC-005.png` (ตอน Fail) | ว่างเปล่า (ไม่ชี้ภาพเก่าที่ไม่ตรงผลปัจจุบันแล้ว ตามกฎ Skill นี้) |
+| Test Photo | `evidence/06a-automation/TC-005.png` (ตอน Fail) | ว่างเปล่า (ไม่ชี้ภาพเก่าที่ไม่ตรงผลปัจจุบันแล้ว ตามกฎ Skill นี้) |
 
 **ไม่แตะคอลัมน์ "Issue link"** ตามกฎของ Skill นี้ — ยังคงชี้ไปที่ Ticket #9 เหมือนเดิม (การคอมเมนต์กลับ/
 ปิด Ticket เป็นหน้าที่ของ `qa-retest-closure` (10a) ต่อไป)

@@ -44,15 +44,15 @@ Text formatting = Markdown (ค่าเดิมที่ยืนยันไ�
 >
 > 📎 แนบไฟล์ภาพผลการ Retest (Pass) ประกอบคอมเมนต์นี้
 
-พร้อมแนบไฟล์ภาพผล Retest จริง (`screenshots/Chromium/TC-005.png`) เป็น Attachment และเปลี่ยน Status เป็น
+พร้อมแนบไฟล์ภาพผล Retest จริง (`../evidence/06a-automation/TC-005.png`) เป็น Attachment และเปลี่ยน Status เป็น
 `Closed` (แสดงเป็น "จบ" ในหน้า UI ภาษาไทยของ instance นี้ — Status ตัวเดียวกับที่ตั้งค่าไว้)
 
-**สกรีนช็อตหน้า Ticket จริงหลังปิดสำเร็จ** (เก็บถาวรไว้ที่ `10-qa-retest-screenshots/`):
+**สกรีนช็อตหน้า Ticket จริงหลังปิดสำเร็จ** (เก็บถาวรไว้ที่ `../evidence/10-qa-retest/`):
 
 | ไฟล์ | เนื้อหา |
 |---|---|
-| [`02-ticket-closed-header.png`](./10-qa-retest-screenshots/02-ticket-closed-header.png) | หัว Ticket #9 — สถานะ "จบ" (Closed) |
-| [`03-ticket-closed-comment-attachment.png`](./10-qa-retest-screenshots/03-ticket-closed-comment-attachment.png) | คอมเมนต์ "Retest → Pass" ตาม Format ที่ยืนยัน พร้อมไฟล์ภาพแนบ และ log "สถานะ changed from Resolved to จบ" |
+| [`02-ticket-closed-header.png`](../evidence/10-qa-retest/02-ticket-closed-header.png) | หัว Ticket #9 — สถานะ "จบ" (Closed) |
+| [`03-ticket-closed-comment-attachment.png`](../evidence/10-qa-retest/03-ticket-closed-comment-attachment.png) | คอมเมนต์ "Retest → Pass" ตาม Format ที่ยืนยัน พร้อมไฟล์ภาพแนบ และ log "สถานะ changed from Resolved to จบ" |
 
 **ผลลัพธ์**: `closed` = 1 เคส (TC-005), `commented` = 0 เคส, `failed` (ทาง API) = 1 เคส (เหตุ network block —
 แก้ไขด้วยการทำผ่านเว็บเองแล้วสำเร็จ)

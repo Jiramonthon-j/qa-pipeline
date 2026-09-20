@@ -22,18 +22,18 @@ Stage: `09 redmine-logging` | วันที่รัน: 2026-09-19 | Redmine/
 `dup02@example.com` ที่สมัครไปแล้ว) แทนที่จะแสดง error ตามที่คาดหวัง — Root Cause คือระบบเช็คอีเมลซ้ำแบบ
 exact-match (case-sensitive) ตาม BR-002 ปัจจุบัน (อ้างอิง RISK-001 High จาก `01-requirement-review.md`)
 
-**หลักฐาน**: `screenshots/Chromium/TC-005.png` (ดูรูปเต็มใน `07-photo-evidence.docx` หน้า TC-005) — วงกลมสีแดง
+**หลักฐาน**: `../evidence/06a-automation/TC-005.png` (ดูรูปเต็มใน `07-photo-evidence.docx` หน้า TC-005) — วงกลมสีแดง
 รอบข้อความ "สมัครรับข่าวสารสำเร็จ" ที่ไม่ควรขึ้น
 
-**สกรีนช็อตหน้า Ticket จริงที่เปิดสำเร็จ** (เก็บถาวรไว้ในโฟลเดอร์ `09-redmine-ticket-screenshots/` เพื่อเป็นหลักฐาน
+**สกรีนช็อตหน้า Ticket จริงที่เปิดสำเร็จ** (เก็บถาวรไว้ในโฟลเดอร์ `../evidence/09-redmine-ticket/` เพื่อเป็นหลักฐาน
 ที่ไม่ขึ้นกับว่า Planio instance นี้ยังใช้งานได้อยู่ไหมในอนาคต เช่นกรณี free trial หมดอายุ):
 
 | ไฟล์ | เนื้อหา |
 |---|---|
-| [`01-ticket-header.png`](./09-redmine-ticket-screenshots/01-ticket-header.png) | หัว Ticket #9 — Subject, สถานะ Open, Priority ปกติ, วันที่เพิ่ม |
-| [`02-ticket-description.png`](./09-redmine-ticket-screenshots/02-ticket-description.png) | เนื้อหา Description ที่ render จาก Markdown จริง (Priority/Test Case ID/Module/Environment/Steps/Test Data/Expected/Actual/Root Cause) |
-| [`03-ticket-attached-screenshot.png`](./09-redmine-ticket-screenshots/03-ticket-attached-screenshot.png) | ภาพหลักฐาน TC-005.png ที่แนบไว้ใน Ticket — เห็นวงกลมแดงรอบข้อความ "สมัครรับข่าวสารสำเร็จ" ที่ไม่ควรขึ้น |
-| [`04-ticket-attachments-list.png`](./09-redmine-ticket-screenshots/04-ticket-attachments-list.png) | รายการไฟล์แนบ + ลิงก์อ้างอิงกลับ Workbook ท้าย Ticket |
+| [`01-ticket-header.png`](../evidence/09-redmine-ticket/01-ticket-header.png) | หัว Ticket #9 — Subject, สถานะ Open, Priority ปกติ, วันที่เพิ่ม |
+| [`02-ticket-description.png`](../evidence/09-redmine-ticket/02-ticket-description.png) | เนื้อหา Description ที่ render จาก Markdown จริง (Priority/Test Case ID/Module/Environment/Steps/Test Data/Expected/Actual/Root Cause) |
+| [`03-ticket-attached-screenshot.png`](../evidence/09-redmine-ticket/03-ticket-attached-screenshot.png) | ภาพหลักฐาน TC-005.png ที่แนบไว้ใน Ticket — เห็นวงกลมแดงรอบข้อความ "สมัครรับข่าวสารสำเร็จ" ที่ไม่ควรขึ้น |
+| [`04-ticket-attachments-list.png`](../evidence/09-redmine-ticket/04-ticket-attachments-list.png) | รายการไฟล์แนบ + ลิงก์อ้างอิงกลับ Workbook ท้าย Ticket |
 
 ## ⏭ ข้าม (0 เคส)
 
@@ -45,7 +45,7 @@ exact-match (case-sensitive) ตาม BR-002 ปัจจุบัน (อ้�
 
 ## Workbook
 
-บันทึกลิงก์ Ticket กลับเข้า `03-test-case-workbook.xlsx` คอลัมน์ "Issue link" ของ TC-005 แล้ว ผ่าน
+บันทึกลิงก์ Ticket กลับเข้า `../workbook/03-test-case-workbook.xlsx` คอลัมน์ "Issue link" ของ TC-005 แล้ว ผ่าน
 `qa_workbook.py update-fields-batch` (Document Control Version History อัปเดตเป็น **Version 5**, Editor:
 `redmine-logging`)
 
@@ -61,4 +61,4 @@ exact-match (case-sensitive) ตาม BR-002 ปัจจุบัน (อ้�
 **ผลลัพธ์**: ผู้ใช้ส่งอีเมลนี้เองโดยตรงจาก Gmail ของตนเองแทน โดยใช้เนื้อหาที่เตรียมไว้ให้ทุกประการ (Subject:
 `[QA] Bug Report Summary — 1 Ticket(s) Opened`, To: `jiramonthon.j@gmail.com`) — ส่งสำเร็จแล้ว ยืนยันด้วย
 สกรีนช็อตอีเมลจริงที่ส่งถึง `jiramonthon.j@gmail.com`:
-[`05-dev-notification-email-sent.png`](./09-redmine-ticket-screenshots/05-dev-notification-email-sent.png)
+[`05-dev-notification-email-sent.png`](../evidence/09-redmine-ticket/05-dev-notification-email-sent.png)

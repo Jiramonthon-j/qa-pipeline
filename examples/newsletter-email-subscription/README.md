@@ -11,45 +11,68 @@
 
 ## โครงสร้างไฟล์ในตัวอย่างนี้
 
+ไฟล์แบ่งเป็นโฟลเดอร์ตามหัวข้อ ไม่ใช่กองรวมกันที่ root — สองไฟล์ที่ root มีแค่ไฟล์นี้กับ
+`_pipeline-manifest.md` (ตารางสถานะรวมทุก Stage เป็น single source of truth) ที่เหลือแยกตามหน้าที่:
+
 ```
 examples/newsletter-email-subscription/
 ├── README.md                          ← ไฟล์นี้
-├── _pipeline-manifest.md              ← ตารางสถานะรวมทุก Stage (single source of truth ว่าถึงไหนแล้ว)
+├── _pipeline-manifest.md              ← ตารางสถานะรวมทุก Stage
+│
+├── reports/                           ← เอกสารผลลัพธ์ของแต่ละ Skill เรียงเลขตามลำดับ Flow จริง
+│   ├── 00-pre-source-ingest.md/.docx  ← Stage 00-pre: สรุปเอกสารต้นทาง
+│   ├── 01-requirement-review.md/.docx ← Stage 01: ตีความ Requirement + Business Rule
+│   ├── 02-e2e-flow.md/.docx           ← Stage 02: ออกแบบ User Flow
+│   ├── 04-coverage-review.md          ← Stage 04: ตรวจ Coverage
+│   ├── 05-risk-analysis.md            ← Stage 05: กำหนด Priority
+│   ├── 06-test-data.md                ← Stage 06: แผน Test Data ก่อนรัน
+│   ├── 07-result-analysis.docx        ← Stage 07: สรุปผล + Root Cause
+│   ├── 07-photo-evidence.docx         ← Stage 07: ภาพหลักฐานประกอบ (9 รูป)
+│   ├── 08-qa-report.docx              ← Stage 08: รายงาน Go/No-Go
+│   ├── 09-redmine-log.md              ← Stage 09: บันทึกการเปิด Ticket จริง
+│   ├── 10-qa-retest.md                ← Stage 10: บันทึกผล Retest จริง
+│   └── 10a-qa-retest-closure.md       ← Stage 10a: บันทึกการปิด Ticket จริง
+│
+├── workbook/                          ← Test Case Workbook ตัวจริงที่หลาย Skill แก้ไขต่อกัน
+│   ├── 03-test-case-workbook.xlsx     ← ไฟล์ live (เวอร์ชันล่าสุด — v6)
+│   ├── RTM-traceability-matrix.xlsx   ← Traceability Matrix (Stage RTM)
+│   └── history/                       ← สำเนา Workbook ณ จุดต่างๆ เปิดเทียบก่อน/หลังแต่ละ Skill ได้ตรงๆ
+│       ├── README.md                  ← อธิบายว่าแต่ละไฟล์ต่างกันตรงไหน
+│       ├── v1-after-03-create.xlsx
+│       ├── v2-after-03-test-case-generator.xlsx
+│       ├── v2-after-04-coverage-review-no-change.xlsx
+│       ├── v3-after-05-risk-analysis.xlsx
+│       ├── v3-after-06-test-data-generator-no-change.xlsx
+│       ├── v4-after-06a-qa-automation-script.xlsx
+│       ├── v5-after-09-redmine-logging.xlsx
+│       └── v6-after-10-qa-retest.xlsx
+│
+├── automation/                        ← Stage 06a: โค้ดที่รันจริง
+│   ├── TC-*.py                        ← Playwright Script จริง 1 ไฟล์ต่อ 1 Test Case
+│   ├── automation-results.json        ← ผลดิบจาก runner ก่อนเขียนกลับ Workbook
+│   └── demo-app/server.py             ← เว็บเดโมจริง (Flask) ที่ automation รันทดสอบด้วยจริง
+│
+├── evidence/                          ← ภาพหลักฐานจริงทุกจุดที่แตะระบบภายนอกหรือรันแล้วเห็นผลด้วยตา
+│   ├── 06a-automation/                ← Stage 06a: ภาพจากการรัน Automation (วงเขียว=Pass, วงแดง=Fail)
+│   │   ├── TC-*.png                   ← ผลปัจจุบัน 11 เคส
+│   │   └── _history/                  ← ภาพผลรอบก่อนหน้าที่ถูกทับ (เก็บไว้เป็น audit trail)
+│   ├── 09-redmine-ticket/             ← Stage 09: หน้า Ticket #9 ตอนเปิดใหม่ (5 รูป)
+│   └── 10-qa-retest/                  ← Stage 10/10a: หน้า Ticket #9 ตอน Dev แจ้งแก้ และตอนปิดสำเร็จ (3 รูป)
+│
 ├── sources/                           ← เอกสารต้นทางจำลอง (สเปกจาก PM, Slack chat log)
-├── testplans/                         ← Stage 00: แผนการทดสอบ
-├── 00-pre-source-ingest.md/.docx      ← Stage 00-pre: สรุปเอกสารต้นทาง
-├── 01-requirement-review.md/.docx     ← Stage 01: ตีความ Requirement + Business Rule
-├── 02-e2e-flow.md/.docx               ← Stage 02: ออกแบบ User Flow
-├── 03-test-case-workbook.xlsx         ← Stage 03+: Test Case Workbook (ไฟล์ศูนย์กลางที่หลาย Skill แก้ไขต่อกัน)
-├── 04-coverage-review.md              ← Stage 04: ตรวจ Coverage
-├── 05-risk-analysis.md                ← Stage 05: กำหนด Priority
-├── 06-test-data.md                    ← Stage 06: แผน Test Data ก่อนรัน
-├── demo-app/server.py                 ← เว็บเดโมจริง (Flask) ที่ automation รันทดสอบด้วยจริง
-├── automation/TC-*.py                 ← Stage 06a: Playwright Script จริง 1 ไฟล์ต่อ 1 Test Case
-├── screenshots/Chromium/TC-*.png      ← Stage 06a: หลักฐานภาพจริงจากการรัน (วงเขียว=Pass, วงแดง=Fail)
-├── automation-results.json            ← Stage 06a: ผลดิบจาก runner ก่อนเขียนกลับ Workbook
-└── workbook-history/                  ← สำเนา Workbook ณ จุดต่างๆ ให้เปิดเทียบก่อน/หลังแต่ละ Skill ได้ตรงๆ
-    ├── README.md                      ← อธิบายว่าแต่ละไฟล์ต่างกันตรงไหน (ดูรายละเอียดที่นี่)
-    ├── v1-after-03-create.xlsx
-    ├── v2-after-03-test-case-generator.xlsx
-    ├── v2-after-04-coverage-review-no-change.xlsx
-    ├── v3-after-05-risk-analysis.xlsx
-    ├── v3-after-06-test-data-generator-no-change.xlsx
-    ├── v4-after-06a-qa-automation-script.xlsx
-    ├── v5-after-09-redmine-logging.xlsx
-    └── v6-after-10-qa-retest.xlsx
+└── testplans/                         ← Stage 00: แผนการทดสอบ
 ```
 
 > อยากเห็นว่าแต่ละ Skill ทำให้ Test Case Workbook เปลี่ยนแปลงตรงไหนบ้าง (หรือไม่เปลี่ยนเลยเพราะแค่ตรวจ
-> สอบ) แบบเปิดไฟล์เทียบกันได้ตรงๆ ดูที่ [`workbook-history/`](./workbook-history/) ได้เลย — มีสำเนาให้ครบ
+> สอบ) แบบเปิดไฟล์เทียบกันได้ตรงๆ ดูที่ [`workbook/history/`](./workbook/history/) ได้เลย — มีสำเนาให้ครบ
 > ตั้งแต่สร้าง Workbook ครั้งแรก (v1) จนถึงหลัง Retest ปิด Ticket ผ่าน (v6)
 
 ## ทำไม Staging URL ถึงไม่ใช่ URL จริง
 
 `Env & Config` ในเอกสารระบุ `https://staging.example-shop.test/` ซึ่งเป็น URL สมมติ (ตัวอย่างนี้ไม่มี
 ระบบ e-commerce จริงอยู่เบื้องหลัง) — เพื่อให้ Stage 06a รัน Automation ได้ "จริง" แทนที่จะ mock ผลลัพธ์
-ไว้ล่วงหน้า จึงสร้าง `demo-app/server.py` เป็นเว็บเดโมขึ้นมาเองที่ implement ตาม Business Rule ใน
-`01-requirement-review.md` ตรงๆ (รวมถึงบั๊กที่ตั้งใจปลูกไว้ตาม BR-002) แล้วให้ Playwright รันเทสกับเว็บ
+ไว้ล่วงหน้า จึงสร้าง [`automation/demo-app/server.py`](./automation/demo-app/server.py) เป็นเว็บเดโมขึ้นมาเองที่ implement ตาม Business Rule ใน
+[`reports/01-requirement-review.md`](./reports/01-requirement-review.md) ตรงๆ (รวมถึงบั๊กที่ตั้งใจปลูกไว้ตาม BR-002) แล้วให้ Playwright รันเทสกับเว็บ
 เดโมนี้แทน ผลที่ได้ (Pass/Fail) จึงเป็นผลจริงจากการรันจริง ไม่ใช่ค่าที่เขียนดักไว้ล่วงหน้า
 
 ## Skill ไหนแก้ Test Case Workbook จริง vs. Skill ไหนแค่ตรวจ/ผลิตไฟล์แยก
@@ -61,32 +84,32 @@ Workbook เด็ดขาด** เพื่อไม่ให้ขั้น�
 
 | # | Skill | ไฟล์ผลลัพธ์ของ Skill นี้ | แก้ Test Case Workbook จริงไหม | รายละเอียด |
 |---|---|---|---|---|
-| 1 | `source-ingest` (00-pre) | `00-pre-source-ingest.md/.docx` | ไม่ (Workbook ยังไม่ถูกสร้าง) | สรุปเอกสารต้นทาง ยังไม่มี Test Case |
+| 1 | `source-ingest` (00-pre) | `reports/00-pre-source-ingest.md/.docx` | ไม่ (Workbook ยังไม่ถูกสร้าง) | สรุปเอกสารต้นทาง ยังไม่มี Test Case |
 | 2 | `test-plan` (00) | `testplans/TP-*.md/.docx` | ไม่ | วางแผนการทดสอบระดับสูง |
-| 3 | `requirement-review` (01) | `01-requirement-review.md/.docx` | ไม่ | ตีความ Requirement/Business Rule/ประเมินความเสี่ยงเบื้องต้น |
-| 4 | `e2e-flow-designer` (02) | `02-e2e-flow.md/.docx` | ไม่ | ออกแบบ User Flow + Decision Point |
-| 5 | `test-case-generator` (03) | `03-test-case-workbook.xlsx` | **ใช่ (สร้างไฟล์ + เพิ่ม Test Case)** | v1 = สร้าง Workbook, v2 = เพิ่ม TC-001–TC-011 |
-| 6 | `coverage-review` (04) | `04-coverage-review.md` | ขึ้นอยู่กับผล — รอบนี้ **ไม่แก้** | พบ 2 จุด แต่ผู้ใช้เลือก Defer/Keep-as-is ทั้งคู่ จึงไม่มีอะไรต้องแก้ (ถ้าเลือก Fix จะกลับไปแก้ที่ Skill 03 แทน ไม่ใช่แก้เอง) |
-| 7 | `risk-analysis` (05) | `05-risk-analysis.md` | **ใช่ (คอลัมน์ Priority)** | v3 = กำหนด P0–P3 ให้ครบ 11 เคส |
-| 8 | `test-data-generator` (06) | `06-test-data.md` | ไม่ (เป็นแผนก่อนรัน) | ค่าจริงจะถูกใส่กลับ Workbook ทีหลังโดย Skill 06a |
-| 9 | `qa-automation-script` (06a) | `automation/`, `screenshots/` | **ใช่ (Status/Actual Result/Test Data/Remarks/Execution Date/Test By/Test Photo)** | v4 = รัน Automation จริง 11 เคส (Pass 10, Fail 1 คือ TC-005) |
-| 10 | `result-analysis` (07) | `07-result-analysis.docx` + `07-photo-evidence.docx` | **ไม่ — ห้ามแก้เด็ดขาดตาม SKILL.md** | ทำแล้ว (Partial): Coverage 11/11 บน Chromium, พบ Root Cause จริง 1 ประเด็น (TC-005, P1) |
-| 11 | `qa-reconcile` (RTM, 07a) | `RTM-traceability-matrix.xlsx` | **ไม่ — ห้ามแก้เด็ดขาดตาม SKILL.md** | ทำแล้ว: คำนวณ Traceability ใหม่สดจากไฟล์ต้นทาง (ไม่เชื่อชีต Requirement Matrix เดิม) ตรงกัน 100% ไม่พบความไม่ตรงกัน — พบ Finding 4 รายการ (TC-010 Orphan → Accepted Gap, REQ-NF-003/004 ไม่มี Test Case → Defer ต่อ, BR-002/FLOW-001 ยังมี Assumption ค้างจาก RISK-001 → ติดตามต่อ) บันทึกไว้ในชีต Findings ของไฟล์ผลลัพธ์ |
-| 12 | `qa-report-generator` (08) | `08-qa-report.docx` | **ไม่ — ห้ามแก้เด็ดขาดตาม SKILL.md** | ทำแล้ว (Provisional เพราะ Stage 07 ยังเป็น Partial): อ่านสดจาก Workbook + RTM Findings สรุปผลเป็น **Conditional Go** (ไม่มี P0 Fail แต่มี P1 Fail 1 เคส คือ TC-005) |
-| 13 | `redmine-logging` (09) | Ticket จริงใน Redmine + `09-redmine-log.md` | **ใช่ เฉพาะคอลัมน์ "Issue link"** (ถ้าเลือก Export แทนจะไม่แก้) | ทำแล้ว: เปิด **Ticket #9** จริงใน Planio ให้ TC-005 (เคสเดียวที่ Fail จริง) บันทึกลิงก์กลับเข้า Workbook แล้ว (v5) — เปิดผ่านหน้าเว็บเองเพราะ network allowlist ของ environment บล็อกโดเมน Planio ไว้ (ดู `09-redmine-log.md`) |
-| 14 | `qa-retest` (10) | `10-qa-retest.md` | **ใช่ (Status/Actual Result/Remarks/Execution Date/Test Photo)** | ทำแล้ว: Dev แก้บั๊ก TC-005 จริงใน `demo-app/server.py` (BR-002 → case-insensitive) เปลี่ยน Ticket #9 เป็น `Resolved` → Retest จริงด้วย Playwright บน Chromium **ผล Pass** บันทึกกลับ Workbook แล้ว (v6) |
-| 15 | `qa-retest-closure` (10a) | คอมเมนต์/ปิด Ticket ใน Redmine จริง + `10a-qa-retest-closure.md` | **ไม่** | ทำแล้ว: Recheck ผล Retest ของ TC-005 แล้วปิด **Ticket #9** จริงใน Planio (คอมเมนต์ "Retest → Pass" พร้อมแนบภาพ) — อ่าน Workbook เป็นข้อมูลอ้างอิงเท่านั้น ไม่เขียนกลับ |
+| 3 | `requirement-review` (01) | `reports/01-requirement-review.md/.docx` | ไม่ | ตีความ Requirement/Business Rule/ประเมินความเสี่ยงเบื้องต้น |
+| 4 | `e2e-flow-designer` (02) | `reports/02-e2e-flow.md/.docx` | ไม่ | ออกแบบ User Flow + Decision Point |
+| 5 | `test-case-generator` (03) | `workbook/03-test-case-workbook.xlsx` | **ใช่ (สร้างไฟล์ + เพิ่ม Test Case)** | v1 = สร้าง Workbook, v2 = เพิ่ม TC-001–TC-011 |
+| 6 | `coverage-review` (04) | `reports/04-coverage-review.md` | ขึ้นอยู่กับผล — รอบนี้ **ไม่แก้** | พบ 2 จุด แต่ผู้ใช้เลือก Defer/Keep-as-is ทั้งคู่ จึงไม่มีอะไรต้องแก้ (ถ้าเลือก Fix จะกลับไปแก้ที่ Skill 03 แทน ไม่ใช่แก้เอง) |
+| 7 | `risk-analysis` (05) | `reports/05-risk-analysis.md` | **ใช่ (คอลัมน์ Priority)** | v3 = กำหนด P0–P3 ให้ครบ 11 เคส |
+| 8 | `test-data-generator` (06) | `reports/06-test-data.md` | ไม่ (เป็นแผนก่อนรัน) | ค่าจริงจะถูกใส่กลับ Workbook ทีหลังโดย Skill 06a |
+| 9 | `qa-automation-script` (06a) | `automation/`, `evidence/06a-automation/` | **ใช่ (Status/Actual Result/Test Data/Remarks/Execution Date/Test By/Test Photo)** | v4 = รัน Automation จริง 11 เคส (Pass 10, Fail 1 คือ TC-005) |
+| 10 | `result-analysis` (07) | `reports/07-result-analysis.docx` + `reports/07-photo-evidence.docx` | **ไม่ — ห้ามแก้เด็ดขาดตาม SKILL.md** | ทำแล้ว (Partial): Coverage 11/11 บน Chromium, พบ Root Cause จริง 1 ประเด็น (TC-005, P1) |
+| 11 | `qa-reconcile` (RTM, 07a) | `workbook/RTM-traceability-matrix.xlsx` | **ไม่ — ห้ามแก้เด็ดขาดตาม SKILL.md** | ทำแล้ว: คำนวณ Traceability ใหม่สดจากไฟล์ต้นทาง (ไม่เชื่อชีต Requirement Matrix เดิม) ตรงกัน 100% ไม่พบความไม่ตรงกัน — พบ Finding 4 รายการ (TC-010 Orphan → Accepted Gap, REQ-NF-003/004 ไม่มี Test Case → Defer ต่อ, BR-002/FLOW-001 ยังมี Assumption ค้างจาก RISK-001 → ติดตามต่อ) บันทึกไว้ในชีต Findings ของไฟล์ผลลัพธ์ |
+| 12 | `qa-report-generator` (08) | `reports/08-qa-report.docx` | **ไม่ — ห้ามแก้เด็ดขาดตาม SKILL.md** | ทำแล้ว (Provisional เพราะ Stage 07 ยังเป็น Partial): อ่านสดจาก Workbook + RTM Findings สรุปผลเป็น **Conditional Go** (ไม่มี P0 Fail แต่มี P1 Fail 1 เคส คือ TC-005) |
+| 13 | `redmine-logging` (09) | Ticket จริงใน Redmine + `reports/09-redmine-log.md` | **ใช่ เฉพาะคอลัมน์ "Issue link"** (ถ้าเลือก Export แทนจะไม่แก้) | ทำแล้ว: เปิด **Ticket #9** จริงใน Planio ให้ TC-005 (เคสเดียวที่ Fail จริง) บันทึกลิงก์กลับเข้า Workbook แล้ว (v5) — เปิดผ่านหน้าเว็บเองเพราะ network allowlist ของ environment บล็อกโดเมน Planio ไว้ (ดู `reports/09-redmine-log.md`) |
+| 14 | `qa-retest` (10) | `reports/10-qa-retest.md` | **ใช่ (Status/Actual Result/Remarks/Execution Date/Test Photo)** | ทำแล้ว: Dev แก้บั๊ก TC-005 จริงใน `automation/demo-app/server.py` (BR-002 → case-insensitive) เปลี่ยน Ticket #9 เป็น `Resolved` → Retest จริงด้วย Playwright บน Chromium **ผล Pass** บันทึกกลับ Workbook แล้ว (v6) |
+| 15 | `qa-retest-closure` (10a) | คอมเมนต์/ปิด Ticket ใน Redmine จริง + `reports/10a-qa-retest-closure.md` | **ไม่** | ทำแล้ว: Recheck ผล Retest ของ TC-005 แล้วปิด **Ticket #9** จริงใน Planio (คอมเมนต์ "Retest → Pass" พร้อมแนบภาพ) — อ่าน Workbook เป็นข้อมูลอ้างอิงเท่านั้น ไม่เขียนกลับ |
 
 ครบทั้ง 15 Skill แล้ว — TC-005 (บั๊กเดียวที่พบจริงในตัวอย่างนี้) ผ่านวงจรครบ: เปิด Ticket (09) → Retest
 หลัง Dev แก้ (10) → ปิด Ticket จริง (10a)
 
-**อยากเห็นของจริงแบบเปิดไฟล์เทียบกันเลยไม่ต้องอ่านตาราง?** ไปที่ [`workbook-history/`](./workbook-history/)
-— มีสำเนา Workbook แยกไฟล์ตามจุดที่ Skill 03/04/05/06/06a ทำงานจริง เปิด 2 ไฟล์ข้างๆ กันแล้วเห็นความ
+**อยากเห็นของจริงแบบเปิดไฟล์เทียบกันเลยไม่ต้องอ่านตาราง?** ไปที่ [`workbook/history/`](./workbook/history/)
+— มีสำเนา Workbook แยกไฟล์ตามจุดที่ Skill 03/04/05/06/06a/09/10 ทำงานจริง เปิด 2 ไฟล์ข้างๆ กันแล้วเห็นความ
 ต่าง (หรือความเหมือนเป๊ะในกรณีที่ Skill นั้นไม่ได้แก้ไข) ได้ทันที
 
 ### แล้วดูหลักฐานการแก้ไข Workbook แบบ "จับต้องได้" ได้จากไหน
 
-เปิด `03-test-case-workbook.xlsx` ไปที่ชีต **"Document Control"** — มีตาราง Version History ที่บันทึกไว้
+เปิด [`workbook/03-test-case-workbook.xlsx`](./workbook/03-test-case-workbook.xlsx) ไปที่ชีต **"Document Control"** — มีตาราง Version History ที่บันทึกไว้
 อัตโนมัติทุกครั้งที่มี Skill ไหนแก้ไฟล์นี้จริง (Version / วันที่ / **ชื่อ Skill ที่แก้** / สรุปว่าแก้อะไร) ปัจจุบัน
 (หลัง Stage 10) หน้าตาเป็นแบบนี้:
 
@@ -108,11 +131,11 @@ Version History นี้เลย ในขณะที่ Skill ที่ค�
 
 ตั้งใจปลูกความคลุมเครือไว้ตั้งแต่ต้นสาย (`sources/.../SRC-002-slack-chat-log.md`) ว่าทีม Dev ตัดสินใจ
 ชั่วคราวให้เช็คอีเมลซ้ำแบบ exact-match (case-sensitive) — ประเด็นนี้ถูกส่งต่อและยืนยันความเสี่ยงผ่านมา
-ทุก Stage: `01-requirement-review.md` (BR-002 + RISK-001 High) → `02-e2e-flow.md` (DP-002) →
-`03-test-case-workbook.xlsx` (TC-005) → `04-coverage-review.md` (ยืนยัน Deferred ไม่ใช่จุดตกหล่น) →
-`05-risk-analysis.md` (Priority P1) → **`06a` รันจริงแล้ว Fail จริง** ตามที่คาดไว้ทุกประการ →
-`09-redmine-log.md` (เปิด Ticket #9 จริงใน Planio ให้ Dev แก้) → `10-qa-retest.md` (Dev แก้บั๊กจริง
-ใน `demo-app/server.py` แล้ว Retest ด้วย Playwright จริง ผล `Pass`) → **`10a-qa-retest-closure.md`
+ทุก Stage: [`reports/01-requirement-review.md`](./reports/01-requirement-review.md) (BR-002 + RISK-001 High) → [`reports/02-e2e-flow.md`](./reports/02-e2e-flow.md) (DP-002) →
+`workbook/03-test-case-workbook.xlsx` (TC-005) → [`reports/04-coverage-review.md`](./reports/04-coverage-review.md) (ยืนยัน Deferred ไม่ใช่จุดตกหล่น) →
+[`reports/05-risk-analysis.md`](./reports/05-risk-analysis.md) (Priority P1) → **`06a` รันจริงแล้ว Fail จริง** ตามที่คาดไว้ทุกประการ →
+[`reports/09-redmine-log.md`](./reports/09-redmine-log.md) (เปิด Ticket #9 จริงใน Planio ให้ Dev แก้) → [`reports/10-qa-retest.md`](./reports/10-qa-retest.md) (Dev แก้บั๊กจริง
+ใน `automation/demo-app/server.py` แล้ว Retest ด้วย Playwright จริง ผล `Pass`) → **[`reports/10a-qa-retest-closure.md`](./reports/10a-qa-retest-closure.md)
 (ปิด Ticket #9 จริง พร้อมคอมเมนต์ยืนยันผลและแนบภาพ)** — สามารถไล่อ่านตามลำดับไฟล์ด้านบนเพื่อดู
 Traceability ของบั๊กตัวนี้ตั้งแต่ต้นจนจบ (เปิด → พบ → แจ้ง Dev → แก้ → ยืนยันด้วย Retest จริง → ปิด Ticket)
 ได้ครบวงจรทั้ง 15 Skill
