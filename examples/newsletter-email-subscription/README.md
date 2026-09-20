@@ -86,6 +86,16 @@ examples/newsletter-email-subscription/
 [`reports/01-requirement-review.md`](./reports/01-requirement-review.md) ตรงๆ (รวมถึงบั๊กที่ตั้งใจปลูกไว้ตาม BR-002) แล้วให้ Playwright รันเทสกับเว็บ
 เดโมนี้แทน ผลที่ได้ (Pass/Fail) จึงเป็นผลจริงจากการรันจริง ไม่ใช่ค่าที่เขียนดักไว้ล่วงหน้า
 
+## ทำไม Automation รันแค่ Chromium
+
+Test Plan และ Test Case กำหนดให้ต้องทดสอบครบ 4 Browser (Chrome/Safari/Firefox/Edge) ตาม `TC-009`
+(Cross-browser) แต่ environment ที่ใช้รันจริงในตัวอย่างนี้ติดตั้งไว้แค่ Chromium ตัวเดียว — เป็นข้อจำกัด
+ของเครื่องที่ใช้รัน ไม่ใช่ข้อจำกัดของ Skill หรือของสคริปต์ Automation เอง (`run_automation.py` รองรับ
+`--browser` เป็น chromium/firefox/webkit อยู่แล้วตาม API ของ Playwright พร้อมสลับใช้ได้ทันทีถ้ามี Browser
+อื่นติดตั้งเพิ่ม) จึงรายงานผล Stage 06a และ 07 ตรงไปตรงมาว่าเป็น **Complete (Partial)** แทนที่จะปิดเป็น
+Complete เต็มรูปแบบ และคงสถานะนี้ไว้ใน [`_pipeline-manifest.md`](./_pipeline-manifest.md) ตลอดทั้งสาย
+ไม่ปิดบังข้อจำกัดนี้ในรายงานใดๆ
+
 ## Skill ไหนแก้ Test Case Workbook จริง vs. Skill ไหนแค่ตรวจ/ผลิตไฟล์แยก
 
 ฟีเจอร์นี้ผ่านมาแล้วครบทั้ง **15/15 Skill** คำถามที่พบบ่อยเวลาดูตัวอย่างนี้คือ "แล้วรู้ได้
