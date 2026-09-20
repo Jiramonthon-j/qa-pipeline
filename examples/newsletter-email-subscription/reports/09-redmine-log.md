@@ -26,14 +26,14 @@ exact-match (case-sensitive) ตาม BR-002 ปัจจุบัน (อ้�
 รอบข้อความ "สมัครรับข่าวสารสำเร็จ" ที่ไม่ควรขึ้น
 
 **สกรีนช็อตหน้า Ticket จริงที่เปิดสำเร็จ** (เก็บถาวรไว้ในโฟลเดอร์ `../evidence/09-redmine-ticket/` เพื่อเป็นหลักฐาน
-ที่ไม่ขึ้นกับว่า Planio instance นี้ยังใช้งานได้อยู่ไหมในอนาคต เช่นกรณี free trial หมดอายุ):
+ที่ไม่ขึ้นกับว่า Planio instance นี้ยังใช้งานได้อยู่ไหมในอนาคต เช่นกรณี free trial หมดอายุ — รวมทุกจุดไว้ใน
+ภาพเดียวเรียงเป็นลำดับ ไม่ต้องเปิดหลายไฟล์):
 
-| ไฟล์ | เนื้อหา |
-|---|---|
-| [`01-ticket-header.png`](../evidence/09-redmine-ticket/01-ticket-header.png) | หัว Ticket #9 — Subject, สถานะ Open, Priority ปกติ, วันที่เพิ่ม |
-| [`02-ticket-description.png`](../evidence/09-redmine-ticket/02-ticket-description.png) | เนื้อหา Description ที่ render จาก Markdown จริง (Priority/Test Case ID/Module/Environment/Steps/Test Data/Expected/Actual/Root Cause) |
-| [`03-ticket-attached-screenshot.png`](../evidence/09-redmine-ticket/03-ticket-attached-screenshot.png) | ภาพหลักฐาน TC-005.png ที่แนบไว้ใน Ticket — เห็นวงกลมแดงรอบข้อความ "สมัครรับข่าวสารสำเร็จ" ที่ไม่ควรขึ้น |
-| [`04-ticket-attachments-list.png`](../evidence/09-redmine-ticket/04-ticket-attachments-list.png) | รายการไฟล์แนบ + ลิงก์อ้างอิงกลับ Workbook ท้าย Ticket |
+[`09-redmine-ticket-opened.png`](../evidence/09-redmine-ticket/09-redmine-ticket-opened.png) — รวม 5 ส่วนตามลำดับ:
+1) หัว Ticket #9 (Subject, สถานะ Open, Priority ปกติ, วันที่เพิ่ม), 2) เนื้อหา Description ที่ render จาก
+Markdown จริง (Priority/Test Case ID/Module/Environment/Steps/Test Data/Expected/Actual/Root Cause),
+3) ภาพหลักฐาน TC-005.png ที่แนบไว้ใน Ticket — วงกลมแดงรอบข้อความ "สมัครรับข่าวสารสำเร็จ" ที่ไม่ควรขึ้น,
+4) รายการไฟล์แนบ + ลิงก์อ้างอิงกลับ Workbook ท้าย Ticket, 5) สกรีนช็อตอีเมลแจ้งเตือน Dev ที่ส่งจริง
 
 ## ⏭ ข้าม (0 เคส)
 
@@ -59,6 +59,5 @@ exact-match (case-sensitive) ตาม BR-002 ปัจจุบัน (อ้�
 ล่วงหน้า
 
 **ผลลัพธ์**: ผู้ใช้ส่งอีเมลนี้เองโดยตรงจาก Gmail ของตนเองแทน โดยใช้เนื้อหาที่เตรียมไว้ให้ทุกประการ (Subject:
-`[QA] Bug Report Summary — 1 Ticket(s) Opened`, To: `jiramonthon.j@gmail.com`) — ส่งสำเร็จแล้ว ยืนยันด้วย
-สกรีนช็อตอีเมลจริงที่ส่งถึง `jiramonthon.j@gmail.com`:
-[`05-dev-notification-email-sent.png`](../evidence/09-redmine-ticket/05-dev-notification-email-sent.png)
+`[QA] Bug Report Summary — 1 Ticket(s) Opened`) — ส่งสำเร็จแล้ว ยืนยันด้วยสกรีนช็อตอีเมลจริง (ส่วนที่ 5 ของ
+[`09-redmine-ticket-opened.png`](../evidence/09-redmine-ticket/09-redmine-ticket-opened.png) ด้านบน)
