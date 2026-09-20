@@ -14,6 +14,17 @@
 ไฟล์แบ่งเป็นโฟลเดอร์ตามหัวข้อ ไม่ใช่กองรวมกันที่ root — สองไฟล์ที่ root มีแค่ไฟล์นี้กับ
 `_pipeline-manifest.md` (ตารางสถานะรวมทุก Stage เป็น single source of truth) ที่เหลือแยกตามหน้าที่:
 
+**ภาพรวมคร่าวๆ ว่าแต่ละโฟลเดอร์เก็บอะไร:**
+
+- `reports/` — เอกสารสรุปผลของทุก Skill (ตีความ Requirement, ออกแบบ Flow, Coverage, Risk, ผลทดสอบ, log การเปิด/ปิด Ticket ฯลฯ)
+- `workbook/` — Test Case Workbook + RTM ตัวจริงที่ใช้งานอยู่ปัจจุบัน และ `history/` เก็บสำเนาย้อนหลังทุกเวอร์ชัน
+- `automation/` — สคริปต์ Playwright ของแต่ละ Test Case และเว็บเดโม (`demo-app/`) ที่ automation รันทดสอบด้วยจริง
+- `evidence/` — ภาพหลักฐานทั้งหมด ทั้งผลการรัน Automation และหน้าจอ Redmine Ticket ตอนเปิด/แก้/ปิด
+- `sources/` — เอกสารต้นทางจำลอง (สเปกจาก PM, Slack chat log) ที่ใช้เริ่มต้น Pipeline
+- `testplans/` — แผนการทดสอบระดับสูงจาก Stage 00
+
+รายละเอียดเต็มทีละไฟล์ดูได้จากผังด้านล่าง:
+
 ```
 examples/newsletter-email-subscription/
 ├── README.md                          ← ไฟล์นี้
