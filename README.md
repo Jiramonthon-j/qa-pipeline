@@ -1,6 +1,6 @@
 # QA Pipeline — Process Flow
 
-15 Skill ที่ทำงานต่อเนื่องกัน ตั้งแต่รวบรวม Requirement จนถึงปิด Ticket ใน Redmine หลังแก้บั๊ก ใช้เป็น Framework อ้างอิงเมื่อเริ่มทดสอบฟีเจอร์ใหม่ ทุก Skill ผ่านการรันจริงกับเคสจำลอง "Discount Code Application" มาแล้วอย่างน้อย 1 รอบเต็ม (รวม Redmine จริง)
+15 Skill ที่ทำงานต่อเนื่องกัน ตั้งแต่รวบรวม Requirement จนถึงปิด Ticket ใน Redmine หลังแก้บั๊ก ใช้เป็น Framework อ้างอิงเมื่อเริ่มทดสอบฟีเจอร์ใหม่ ทุก Skill ผ่านการรันจริงครบทั้งสายกับฟีเจอร์ตัวอย่าง "Newsletter Email Subscription" มาแล้วอย่างน้อย 1 รอบเต็ม (รวม Redmine จริง — ดู [`examples/newsletter-email-subscription/`](./examples/newsletter-email-subscription/))
 
 **สรุป**: 15 Stage / 4 Phase เรียงเส้นตรง ยกเว้น Phase สุดท้ายวนซ้ำได้ · เกือบทั้งหมดอัตโนมัติ มีเพียง 3 จุดที่ต้องรอคนอนุมัติ (Stage 00-pre, 00, และลายเซ็นใน `08-qa-report.docx`) · Stage 09–10a ต่อ Redmine จริง ต้องขอ URL/API Key ใหม่ทุกครั้ง (ดู [ความปลอดภัย](#ความปลอดภัยของข้อมูลรับรอง))
 
@@ -8,30 +8,36 @@
 
 ## โครงสร้าง Repository
 
-ตอนนี้เผยแพร่เฉพาะ `skills/` (ตัว Pipeline framework) — ตัวอย่างการรันจริงครบทุก Stage จะเพิ่มเป็นโฟลเดอร์แยกทีหลัง
-
 ```
 .
-└── skills/
-    ├── 00-pre-source-ingest/
-    ├── 00-test-plan/
-    ├── 01-requirement-review/
-    ├── 02-e2e-flow-designer/
-    ├── 03-test-case-generator/
-    ├── 04-coverage-review/
-    ├── 05-risk-analysis/
-    ├── 06-test-data-generator/
-    ├── 06a-qa-automation-script/
-    ├── 07-result-analysis/
-    ├── 07a-RTM-qa-reconcile/
-    ├── 08-qa-report-generator/
-    ├── 09-redmine-logging/
-    ├── 10-qa-retest/
-    ├── 10a-qa-retest-closure/
-    └── _shared/                # โมดูลใช้ร่วมกันหลาย Skill (ไม่ใช่ Stage ในสาย Flow)
+├── skills/                    # ตัว Pipeline framework — นิยาม 15 Skill
+│   ├── 00-pre-source-ingest/
+│   ├── 00-test-plan/
+│   ├── 01-requirement-review/
+│   ├── 02-e2e-flow-designer/
+│   ├── 03-test-case-generator/
+│   ├── 04-coverage-review/
+│   ├── 05-risk-analysis/
+│   ├── 06-test-data-generator/
+│   ├── 06a-qa-automation-script/
+│   ├── 07-result-analysis/
+│   ├── 07a-RTM-qa-reconcile/
+│   ├── 08-qa-report-generator/
+│   ├── 09-redmine-logging/
+│   ├── 10-qa-retest/
+│   ├── 10a-qa-retest-closure/
+│   └── _shared/                # โมดูลใช้ร่วมกันหลาย Skill (ไม่ใช่ Stage ในสาย Flow)
+├── examples/
+│   └── newsletter-email-subscription/   # ตัวอย่างรันจริงครบทั้ง 15 Skill กับฟีเจอร์เล็กๆ 1 ฟีเจอร์
+│                                         # (รวม Redmine Ticket จริง, Playwright Automation จริง — ดู README ในนั้น)
+├── docs/
+│   └── qa-pipeline-flow.html  # แผนภาพกระบวนการแบบ standalone (ไฟล์เดียวกับ Mermaid ด้านล่าง เปิดดูได้โดยไม่ต้องพึ่ง GitHub renderer)
+└── test-reports/               # รายงานผลการทดสอบ Skill ระหว่างพัฒนา (ไม่ใช่ส่วนหนึ่งของ Pipeline)
 ```
 
-โฟลเดอร์ตั้งชื่อตามลำดับ Flow จริง (00 → 10a)
+โฟลเดอร์ `skills/` ตั้งชื่อตามลำดับ Flow จริง (00 → 10a) — อยากเห็นตัวอย่างการรันจริงแบบจับต้องได้ (ไฟล์
+เอกสาร, Test Case Workbook ทุก Version, สกรีนช็อตหลักฐานทุก Skill ที่แตะระบบภายนอก) ไปที่
+[`examples/newsletter-email-subscription/`](./examples/newsletter-email-subscription/) ได้เลย
 
 ---
 
@@ -100,6 +106,9 @@ flowchart TD
 ```
 
 สีเขียวอ่อน = อัตโนมัติทั้งหมด · สีน้ำตาลอ่อน = ต้องอนุมัติ/ลงนามจากคนก่อนถือว่าเสร็จ
+
+ดูแผนภาพนี้แบบ standalone (ไฟล์ HTML เดี่ยว ไม่ต้องพึ่ง Mermaid renderer ของ GitHub) ได้ที่
+[`docs/qa-pipeline-flow.html`](./docs/qa-pipeline-flow.html)
 
 ---
 

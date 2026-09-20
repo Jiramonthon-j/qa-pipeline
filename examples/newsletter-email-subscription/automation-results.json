@@ -1,0 +1,90 @@
+{
+  "TC-001": {
+    "status": "Pass",
+    "actual_result": "ระบบแสดงข้อความ 'สมัครรับข่าวสารสำเร็จ ขอบคุณที่ติดตามเรา' แบบ inline ใต้ปุ่ม และบันทึกอีเมลลง subscriber สำเร็จ",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-001.png"
+  },
+  "TC-002": {
+    "status": "Pass",
+    "actual_result": "ระบบแสดง error 'กรุณากรอกอีเมลให้ถูกต้อง' แบบ inline และไม่มีการบันทึกข้อมูล",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-002.png"
+  },
+  "TC-003": {
+    "status": "Pass",
+    "actual_result": "ระบบแสดง error 'กรุณากรอกอีเมลให้ถูกต้อง' แบบ inline สำหรับอีเมลที่มี @ แต่ไม่มีโดเมน",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-003.png"
+  },
+  "TC-004": {
+    "status": "Pass",
+    "actual_result": "ระบบแสดง error 'อีเมลนี้สมัครรับข่าวสารไปแล้ว' แบบ inline และไม่ยอมให้สมัครซ้ำด้วยอีเมลเดิมทุกตัวอักษร",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-004.png"
+  },
+  "TC-005": {
+    "status": "Fail",
+    "actual_result": "ระบบควรถือว่า 'Dup02@Example.com' เป็นอีเมลเดียวกับ 'dup02@example.com' ที่สมัครไปแล้ว (case-insensitive ตามความคาดหวังผู้ใช้ทั่วไป และตาม RISK-001) และแสดง error 'สมัครรับข่าวสารไปแล้ว' แต่ระบบกลับแสดง class='success' ข้อความ='สมัครรับข่าวสารสำเร็จ ขอบคุณที่ติดตามเรา' แทน — สอดคล้องกับ BR-002 ที่ระบุพฤติกรรมปัจจุบันเป็น exact-match (case-sensitive) ซึ่งเป็นบั๊กเชิงคุณภาพข้อมูลตาม RISK-001 (High)",
+    "remarks": "Test Case Fail จริง: ระบบควรถือว่า 'Dup02@Example.com' เป็นอีเมลเดียวกับ 'dup02@example.com' ที่สมัครไปแล้ว (case-insensitive ตามความคาดหวังผู้ใช้ทั่วไป และตาม RISK-001) และแสดง error 'สมัครรับข่าวสารไปแล้ว' แต่ระบบกลับแสดง class='success' ข้อความ='สมัครรับข่าวสารสำเร็จ ขอบคุณที่ติดตามเรา' แทน — สอดคล้องกับ BR-002 ที่ระบุพฤติกรรมปัจจุบันเป็น exact-match (case-sensitive) ซึ่งเป็นบั๊กเชิงคุณภาพข้อมูลตาม RISK-001 (High)",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-005.png"
+  },
+  "TC-006": {
+    "status": "Pass",
+    "actual_result": "ปุ่ม disable ทันทีหลังกดครั้งแรก ไม่มีคำขอสมัครซ้ำถูกส่งออกไป และปุ่มกลับมาใช้งานได้หลังได้ผลลัพธ์",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-006.png"
+  },
+  "TC-007": {
+    "status": "Pass",
+    "actual_result": "ระบบแสดง error 'กรุณากรอกอีเมลให้ถูกต้อง' แบบ inline เมื่อกดปุ่มโดยไม่กรอกอีเมล",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-007.png"
+  },
+  "TC-008": {
+    "status": "Pass",
+    "actual_result": "ระบบ trim ช่องว่างก่อนตรวจรูปแบบ แสดงข้อความ 'สมัครรับข่าวสารสำเร็จ ขอบคุณที่ติดตามเรา' และบันทึกอีเมลแบบ trim แล้วถูกต้อง",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-008.png"
+  },
+  "TC-009": {
+    "status": "Pass",
+    "actual_result": "ระบบจัดการอีเมลยาวผิดปกติได้โดยไม่ error/crash และแสดง 'กรุณากรอกอีเมลให้ถูกต้อง' ตามมาตรฐาน RFC (local-part ไม่เกิน 64 ตัวอักษร)",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-009.png"
+  },
+  "TC-010": {
+    "status": "Pass",
+    "actual_result": "Footer widget แสดงผลครบและทำงานถูกต้องใน Browser นี้ — ข้อความที่ได้: 'สมัครรับข่าวสารสำเร็จ ขอบคุณที่ติดตามเรา'",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-010.png"
+  },
+  "TC-011": {
+    "status": "Pass",
+    "actual_result": "ระบบแสดง error กลางๆ 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง' แบบ inline โดยไม่ค้าง/crash และปุ่มกลับมาใช้งานได้ปกติ",
+    "remarks": "",
+    "a11y_issues": [],
+    "execution_date": "2026-09-19",
+    "screenshot": "screenshots/Chromium/TC-011.png"
+  }
+}

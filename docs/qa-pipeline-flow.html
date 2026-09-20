@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แผนผัง QA Pipeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2f6f4;
+    --surface:#ffffff;
+    --surface-2:#e9f1ee;
+    --text:#182320;
+    --text-dim:#55655f;
+    --border:#d6e0db;
+    --accent:#0f766e;
+    --accent-strong:#0b5c56;
+    --accent-soft:#d9f0ec;
+    --gate:#b45309;
+    --gate-soft:#fbead0;
+    --good:#15803d;
+    --good-soft:#dcf3e4;
+    --bad:#b3261e;
+    --bad-soft:#fbe3e1;
+    --loop:#6d28d9;
+    --loop-soft:#ece5fb;
+    --shadow: 0 1px 2px rgba(15,40,35,.06), 0 8px 24px -12px rgba(15,40,35,.15);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0f1e1a;
+      --surface:#152a24;
+      --surface-2:#1b352d;
+      --text:#eaf3ef;
+      --text-dim:#9fb6ae;
+      --border:#28453b;
+      --accent:#2dd4bf;
+      --accent-strong:#5eead4;
+      --accent-soft:#123a34;
+      --gate:#f2b84b;
+      --gate-soft:#3a2c11;
+      --good:#4ade80;
+      --good-soft:#123625;
+      --bad:#f2857b;
+      --bad-soft:#3a1a17;
+      --loop:#c4b5fd;
+      --loop-soft:#241b3d;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f1e1a;
+    --surface:#152a24;
+    --surface-2:#1b352d;
+    --text:#eaf3ef;
+    --text-dim:#9fb6ae;
+    --border:#28453b;
+    --accent:#2dd4bf;
+    --accent-strong:#5eead4;
+    --accent-soft:#123a34;
+    --gate:#f2b84b;
+    --gate-soft:#3a2c11;
+    --good:#4ade80;
+    --good-soft:#123625;
+    --bad:#f2857b;
+    --bad-soft:#3a1a17;
+    --loop:#c4b5fd;
+    --loop-soft:#241b3d;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"IBM Plex Sans Thai","IBM Plex Mono",system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:"Kanit","IBM Plex Sans Thai",sans-serif; text-wrap:balance; margin:0; }
+  code, .mono { font-family:"IBM Plex Mono",monospace; }
+
+  .page{ max-width:920px; margin:0 auto; padding: 40px 16px 64px; }
+
+  .hero{ text-align:center; padding: 8px 0 32px; }
+  .eyebrow{ color:var(--accent-strong); font-weight:600; letter-spacing:.04em; font-size:.8rem; text-transform:uppercase; margin:0 0 10px; }
+  .hero h1{ font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight:700; color:var(--text); margin-bottom:12px; }
+  .lede{ color:var(--text-dim); max-width:640px; margin:0 auto; font-size:1rem; }
+
+  .legend{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:20px; }
+  .pill{ display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:.8rem; font-weight:500; white-space:nowrap; border:1px solid transparent; }
+  .pill-auto{ background:var(--accent-soft); color:var(--accent-strong); border-color:var(--accent); }
+  .pill-gate{ background:var(--gate-soft); color:var(--gate); border-color:var(--gate); }
+  .pill-loop{ background:var(--loop-soft); color:var(--loop); border-color:var(--loop); }
+
+  .phase{ margin-top: 48px; }
+  .phase-head{ display:flex; gap:14px; align-items:flex-start; margin-bottom: 22px; }
+  .phase-num{
+    flex: 0 0 40px; height:40px; border-radius:12px;
+    background:var(--accent); color:#fff; font-family:"Kanit",sans-serif; font-weight:700;
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+  }
+  .phase-head h2{ font-size:1.3rem; margin-bottom:4px; }
+  .phase-head p{ color:var(--text-dim); margin:0; font-size:.92rem; }
+
+  ol.spine{ list-style:none; margin:0; padding:0; position:relative; }
+  ol.spine::before{
+    content:''; position:absolute; top:22px; bottom:22px; left:21px; width:2px;
+    background:var(--border);
+  }
+  .node{ position:relative; display:flex; gap:16px; margin-bottom:20px; }
+  .node:last-child{ margin-bottom:0; }
+  .node-badge{
+    position:relative; z-index:1; flex:0 0 44px; height:44px; border-radius:50%;
+    background:var(--surface); border:2px solid var(--accent); color:var(--accent-strong);
+    display:flex; align-items:center; justify-content:center; font-family:"IBM Plex Mono",monospace;
+    font-weight:600; font-size:.72rem; text-align:center; line-height:1.05;
+  }
+  .node.gate .node-badge{ border-color:var(--gate); color:var(--gate); }
+
+  .card{
+    flex:1; min-width:0; background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; padding:16px 18px; box-shadow:var(--shadow);
+  }
+  .node-title-row{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; margin-bottom:6px; }
+  .node-title-row h3{ font-size:1.02rem; font-weight:600; color:var(--text); }
+  .node-title-row code{ background:var(--surface-2); padding:2px 8px; border-radius:6px; font-size:.82rem; color:var(--accent-strong); }
+  .node-desc{ margin:0 0 12px; color:var(--text); font-size:.92rem; }
+
+  .node-io{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:520px){ .node-io{ grid-template-columns:1fr; } }
+  .io-col .io-label{ display:block; font-size:.72rem; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:var(--text-dim); margin-bottom:6px; }
+  .io-col ul{ margin:0; padding-left:18px; font-size:.86rem; }
+  .io-col li{ margin-bottom:3px; }
+  .io-col.inputs{ border-left:2px solid var(--border); padding-left:12px; margin-left:-1px;}
+  .io-col.outputs{ border-left:2px solid var(--accent-soft); padding-left:12px; }
+
+  .gate-flag{ display:inline-flex; align-items:center; gap:5px; background:var(--gate-soft); color:var(--gate); font-size:.76rem; font-weight:600; padding:3px 10px; border-radius:999px; }
+  .cred-flag{ display:inline-block; margin-top:8px; font-size:.8rem; color:var(--gate); background:var(--gate-soft); border-radius:8px; padding:6px 10px; }
+
+  .branch-card, .loop-card{
+    margin-top:20px; margin-left:60px; border:1.5px dashed var(--loop); border-radius:14px;
+    background:var(--loop-soft); padding:14px 18px; font-size:.9rem; color:var(--text);
+  }
+  @media (max-width:520px){ .branch-card, .loop-card{ margin-left:0; } }
+  .branch-card b, .loop-card b{ color:var(--loop); }
+  .outcome-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
+  .outcome{ flex:1; min-width:220px; border-radius:10px; padding:10px 12px; font-size:.86rem; }
+  .outcome.go{ background:var(--good-soft); color:var(--good); }
+  .outcome.nogo{ background:var(--bad-soft); color:var(--bad); }
+
+  .closing{
+    margin-top:48px; text-align:center; background:var(--surface); border:1px solid var(--border);
+    border-radius:16px; padding:26px 20px; box-shadow:var(--shadow);
+  }
+  .closing h2{ font-size:1.15rem; margin-bottom:10px; }
+  .closing p{ color:var(--text-dim); margin:0; font-size:.92rem; }
+
+  .security-note{
+    margin-top:28px; background:var(--gate-soft); border:1px solid var(--gate); border-radius:14px;
+    padding:16px 18px; font-size:.86rem; color:var(--text);
+  }
+  .security-note b{ color:var(--gate); }
+  .security-note ul{ margin:8px 0 0; padding-left:20px; }
+  .security-note li{ margin-bottom:4px; }
+
+  footer.meta{ text-align:center; color:var(--text-dim); font-size:.78rem; margin-top:36px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <p class="eyebrow">QA Pipeline · ทดสอบจริงกับ Discount Code Application · 2026-09-16</p>
+    <h1>แผนผัง QA Pipeline — 15 Skill</h1>
+    <p class="lede">ลำดับการทำงานทั้งสายตั้งแต่รวบรวม Requirement จนถึงปิด Ticket ใน Redmine จริง แต่ละกล่องคือ 1 Skill พร้อมสิ่งที่ต้องป้อนเข้าไปและผลลัพธ์ที่ได้ ทุกขั้นตอนผ่านการรันจริงมาแล้วอย่างน้อย 1 รอบเต็ม</p>
+    <div class="legend">
+      <span class="pill pill-auto">🤖 Claude ทำเองได้ทั้งหมด</span>
+      <span class="pill pill-gate">🧑 ต้องมีคนอนุมัติ/เซ็นจริง</span>
+      <span class="pill pill-loop">🔁 วนซ้ำได้จนกว่าจะผ่าน</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- PHASE A -->
+    <section class="phase">
+      <div class="phase-head">
+        <span class="phase-num">A</span>
+        <div>
+          <h2>วิเคราะห์ Requirement</h2>
+          <p>เก็บข้อมูลต้นทาง → วางแผนทดสอบ → สกัดกฎ/Flow → ออกแบบ Test Case → ตรวจความครบถ้วน → จัดลำดับความเสี่ยง</p>
+        </div>
+      </div>
+      <ol class="spine">
+
+        <li class="node gate">
+          <div class="node-badge">00<br>pre</div>
+          <div class="card">
+            <div class="node-title-row"><h3>source-ingest</h3><code>Stage 00-pre</code><span class="gate-flag">🧑 ต้องรีวิว</span></div>
+            <p class="node-desc">รวบรวมแหล่งข้อมูลต้นทางทั้งหมด (สเปก, เธรด Slack, บันทึกประชุม ฯลฯ) มาสรุปเป็นชุดเดียว พร้อมชี้จุดที่ข้อมูลขัดแย้งหรือยังไม่มีคำตอบให้เห็นตั้งแต่ต้นสาย</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li>ไฟล์ต้นฉบับดิบ: สเปกฟีเจอร์, ข้อความ/เธรด Slack, สรุปประชุม ฯลฯ</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>00-pre-source-ingest.md</code> (+ .docx)</li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="node gate">
+          <div class="node-badge">00</div>
+          <div class="card">
+            <div class="node-title-row"><h3>test-plan</h3><code>Stage 00</code><span class="gate-flag">🧑 ต้องรีวิว</span></div>
+            <p class="node-desc">วางแผนการทดสอบทั้งรอบ: ขอบเขต, Exit Criteria, Environment, ตารางเวลา, ความเสี่ยงของแผนเอง — เอกสารที่ Skill ถัดไปทั้งสายจะอ้างอิง Deadline จากตรงนี้</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li><code>00-pre-source-ingest.md</code></li>
+                <li>Deadline / กำหนดการจริงจากผู้ใช้</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>testplans/TP-…-.md</code> (+ .docx)</li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">01</div>
+          <div class="card">
+            <div class="node-title-row"><h3>requirement-review</h3><code>Stage 01</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">สกัด Business Rule (BR-xxx) ทุกข้อและรวบรวม Open Question ที่ยังไม่มีคำตอบชัดเจนจาก Requirement ต้นทาง</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li><code>00-pre-source-ingest.md</code></li>
+                <li><code>testplans/…</code> (Deadline/ความเสี่ยง)</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>01-requirement-review.md</code></li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">02</div>
+          <div class="card">
+            <div class="node-title-row"><h3>e2e-flow-designer</h3><code>Stage 02</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">ออกแบบ User Flow ทุกเส้นทาง (FLOW-xxx) ทั้ง Main Flow และ Error State จาก Business Rule ที่สกัดไว้</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li><code>01-requirement-review.md</code></li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>02-e2e-flow.md</code></li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">03</div>
+          <div class="card">
+            <div class="node-title-row"><h3>test-case-generator</h3><code>Stage 03</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">สร้าง Test Case ทุกเคส (Positive / Negative / Edge Case) ครอบคลุมทุก BR และ Flow ลงใน Workbook กลางที่ทุก Skill ถัดไปจะอ่าน/เขียนต่อ</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li><code>01</code> + <code>02</code></li>
+                <li>ค่า Env &amp; Config จริง (URL, Browser, Device) จากผู้ใช้</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>03-test-case-workbook.xlsx</code> (ชีต Test Case / Env &amp; Config / Requirement Matrix)</li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">04</div>
+          <div class="card">
+            <div class="node-title-row"><h3>coverage-review</h3><code>Stage 04</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">ตรวจว่า Test Case ที่ออกแบบไว้ครอบคลุมทุก BR/Flow ครบไหม มีจุดตกหล่น/ซ้ำซ้อน/ขัดแย้งหรือไม่</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li>Workbook (03) เทียบกับ <code>01</code> + <code>02</code></li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>04-coverage-review.md</code> (+ แก้ Remarks ใน Workbook ถ้าจำเป็น)</li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">05</div>
+          <div class="card">
+            <div class="node-title-row"><h3>risk-analysis</h3><code>Stage 05</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">กำหนดลำดับความสำคัญ (Priority P0–P3) ให้ทุก Test Case ตามความเสี่ยงจริงของแต่ละเคส ใช้ตัดสิน Go/No-Go ในขั้นท้ายสาย</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li>Workbook (03)</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>05-risk-analysis.md</code> (+ อัปเดตคอลัมน์ Priority ใน Workbook)</li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+      </ol>
+    </section>
+
+    <!-- PHASE B -->
+    <section class="phase">
+      <div class="phase-head">
+        <span class="phase-num">B</span>
+        <div>
+          <h2>เตรียมข้อมูล &amp; รันทดสอบจริง</h2>
+          <p>แปลงเป็นข้อมูลทดสอบจริง → รัน Automation จริงบน Environment จริง → สรุปผล → ตรวจ Traceability</p>
+        </div>
+      </div>
+      <ol class="spine">
+
+        <li class="node">
+          <div class="node-badge">06</div>
+          <div class="card">
+            <div class="node-title-row"><h3>test-data-generator</h3><code>Stage 06</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">แปลงคอลัมน์ Test Data ของทุกเคสให้เป็นข้อมูลที่ใช้ทดสอบได้ทันที (โค้ดส่วนลด, บัญชีทดสอบ, วันหมดอายุที่คำนวณสัมพัทธ์กับวันรันจริง ฯลฯ)</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li>Workbook (03)</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>06-test-data.md</code></li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">06a</div>
+          <div class="card">
+            <div class="node-title-row"><h3>qa-automation-script</h3><code>Stage 06a</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">เขียน + รัน Playwright script จริงทีละ Test Case บน Environment ที่ระบุไว้ จับภาพหน้าจอพร้อมวงไฮไลท์จุดที่ตรวจ แล้วเขียนผล Pass/Fail/Blocked กลับ Workbook</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li>Workbook (03) + <code>06-test-data.md</code></li>
+                <li>Environment ที่รันได้จริง (URL ใช้งานได้จริง)</li>
+                <li>Browser ตามที่ Env &amp; Config กำหนด</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>automation/*.py</code>, <code>screenshots/&lt;Browser&gt;/*.png</code></li>
+                <li>อัปเดต Status / Actual Result / Photo ใน Workbook</li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">07</div>
+          <div class="card">
+            <div class="node-title-row"><h3>result-analysis</h3><code>Stage 07</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">สรุปผลรวมทุกเคส วิเคราะห์ Root Cause ของ Fail/Blocked แยกตามหมวด (Functional Bug / Script Error / Open Question ที่ยังไม่ปิด)</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li>Workbook (03) หลัง 06a รันเสร็จ</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>07-result-analysis.docx</code></li>
+                <li><code>07-photo-evidence.docx</code></li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">RTM</div>
+          <div class="card">
+            <div class="node-title-row"><h3>qa-reconcile</h3><code>Stage RTM</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">คำนวณ Requirement Traceability Matrix ใหม่สดจากข้อมูลจริงเสมอ (ไม่เชื่อชีตเดิม) หา Orphan Requirement/Test Case ที่ไม่มีอะไรโยงถึงกัน</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li><code>01</code> + <code>02</code> + Workbook (03) — อ่านสดทุกครั้ง</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>RTM-traceability-matrix.xlsx</code></li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+
+      </ol>
+    </section>
+
+    <!-- PHASE C -->
+    <section class="phase">
+      <div class="phase-head">
+        <span class="phase-num">C</span>
+        <div>
+          <h2>สรุปผล &amp; ตัดสินใจ</h2>
+          <p>รวมทุกอย่างเป็นรายงานเดียวเสนอผู้อนุมัติ</p>
+        </div>
+      </div>
+      <ol class="spine">
+        <li class="node gate">
+          <div class="node-badge">08</div>
+          <div class="card">
+            <div class="node-title-row"><h3>qa-report-generator</h3><code>Stage 08</code><span class="gate-flag">🧑 ต้องเซ็นจริง</span></div>
+            <p class="node-desc">รวมผลจาก Result Analysis + RTM + Workbook ทั้งหมดเป็นรายงานฉบับเดียว สรุป <b>Go / Conditional Go / No-Go</b> พร้อม Known Issues และช่องเซ็นอนุมัติ — ต้องเช็คว่า Stage 07 ไม่ Partial และ RTM Complete ก่อนเสมอ</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li><code>07</code> + <code>RTM</code> + Workbook (03) + Deadline</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>08-qa-report.docx</code> (ช่องเซ็น QA Lead / PM เว้นว่างไว้ให้เซ็นจริงเสมอ)</li>
+              </ul></div>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="branch-card">
+        <b>จุดตัดสินใจ:</b> อ่านผลสรุปจาก <code>08-qa-report.docx</code>
+        <div class="outcome-row">
+          <div class="outcome go">✅ <b>ไม่มีบั๊กเหลือ</b> → ปิด Feature ได้เลย จบ Pipeline</div>
+          <div class="outcome nogo">⚠️ <b>มี Test Case Fail ค้าง</b> → ไป Phase D เพื่อเปิด/ติดตาม Ticket แก้บั๊ก</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE D -->
+    <section class="phase">
+      <div class="phase-head">
+        <span class="phase-num">D</span>
+        <div>
+          <h2>ปิดบั๊ก (วนซ้ำจนกว่าจะ Pass ครบ)</h2>
+          <p>เปิด Ticket → รอ Dev แก้ → Retest จริง → ปิด/คอมเมนต์ Ticket จริง — วนกลับได้เรื่อยๆ จนกว่า Fail จะหมด</p>
+        </div>
+      </div>
+      <ol class="spine">
+
+        <li class="node">
+          <div class="node-badge">09</div>
+          <div class="card">
+            <div class="node-title-row"><h3>redmine-logging</h3><code>Stage 09</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">เปิด Ticket ใน Redmine จริงให้ทุกเคสที่ Fail พร้อมแนบภาพหลักฐาน แล้วส่งอีเมลแจ้ง Dev</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li>Workbook (เคสที่ Fail)</li>
+                <li>อีเมล Dev ที่จะแจ้ง (ไม่ใช่ข้อมูลลับ)</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li>Ticket จริงใน Redmine, <code>09-redmine-log.md</code></li>
+                <li>อัปเดตคอลัมน์ Issue link ใน Workbook + ส่งอีเมลแจ้ง Dev</li>
+              </ul></div>
+            </div>
+            <div class="cred-flag">🔐 ต้องถาม Redmine URL / API Key และ SMTP credentials สดใหม่ทุกครั้งที่รัน — ไม่เก็บ/แคชไว้ในไฟล์ใดๆ ทั้งสิ้น</div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">10</div>
+          <div class="card">
+            <div class="node-title-row"><h3>qa-retest</h3><code>Stage 10</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">หลัง Dev แจ้งว่าแก้แล้ว กลับไปรัน Automation ซ้ำเฉพาะ Test Case ที่มี Issue link เทียบผลใหม่กับ Expected Result</p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li>Workbook (เคสที่มี Issue link)</li>
+                <li>Environment ที่ Dev แก้ไขแล้ว</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li><code>10-tc-issue-map.json</code>, <code>10-retest-run-result.json</code></li>
+                <li>อัปเดตผล Retest ใน Workbook</li>
+              </ul></div>
+            </div>
+            <div class="cred-flag">🔐 เช็คสถานะ Ticket ผ่าน Redmine URL / API Key สดใหม่เช่นกัน</div>
+          </div>
+        </li>
+
+        <li class="node">
+          <div class="node-badge">10a</div>
+          <div class="card">
+            <div class="node-title-row"><h3>qa-retest-closure</h3><code>Stage 10a</code><span class="pill pill-auto">🤖</span></div>
+            <p class="node-desc">เอาผล Retest ไปจัดการ Ticket จริงใน Redmine: <b>Pass → คอมเมนต์ผล + แนบภาพ + ปิด Ticket</b>, <b>Fail → คอมเมนต์ผลอย่างเดียวแล้วส่งอีเมลแจ้ง Dev ต่อ</b></p>
+            <div class="node-io">
+              <div class="io-col inputs"><span class="io-label">ป้อนข้อมูล</span><ul>
+                <li>ผล Retest จาก Stage 10</li>
+                <li>ชื่อ Status ที่จะใช้ปิด (เช่น "จบ")</li>
+              </ul></div>
+              <div class="io-col outputs"><span class="io-label">ผลลัพธ์</span><ul>
+                <li>ปิด/คอมเมนต์ Ticket จริงใน Redmine</li>
+                <li><code>10a-closure-result.json</code></li>
+              </ul></div>
+            </div>
+            <div class="cred-flag">🔐 Redmine URL / API Key สดใหม่ทุกครั้งเหมือน Stage 09/10</div>
+          </div>
+        </li>
+
+      </ol>
+
+      <div class="loop-card">
+        🔁 <b>ถ้ายังมี Test Case สถานะ Fail เหลืออยู่</b> → วนกลับไปทำ Stage 09 (เปิด/อัปเดต Ticket) → 10 (Retest) → 10a (ปิด Ticket) ใหม่ ซ้ำไปเรื่อยๆ จนกว่า Fail จะหมด<br><br>
+        ✅ <b>เมื่อ Pass ครบทุกเคสและปิด Ticket หมดแล้ว</b> → จบ Pipeline
+      </div>
+    </section>
+
+    <div class="closing">
+      <h2>✅ Feature หนึ่งจะ "ปิดสมบูรณ์" ได้ก็ต่อเมื่อ</h2>
+      <p>Stage 01–10a ทั้งหมด = Complete, ไม่มี Test Case สถานะ Fail ค้าง, Stage 00-pre และ 00 ได้รับการอนุมัติจริงจากคน (ไม่ใช่ AI), และช่องเซ็น QA Lead / PM ใน 08-qa-report.docx ถูกเซ็นจริงแล้ว</p>
+    </div>
+
+  </main>
+
+  <div class="security-note">
+    <b>🔒 กฎความปลอดภัยที่ใช้ตลอดทั้งสาย (Stage 09 / 10 / 10a)</b>
+    <ul>
+      <li>Redmine URL และ API Key ต้องถูกถามใหม่ทุกครั้งที่เรียก Skill — ห้ามแคช/บันทึกไว้ในไฟล์ใดๆ ตั้งค่าผ่าน Environment Variable เท่านั้น (ห้ามส่งผ่าน argument ตรงๆ)</li>
+      <li>กฎเดียวกันนี้ใช้กับ SMTP credentials สำหรับส่งอีเมลแจ้ง Dev</li>
+      <li>อีเมล Dev ไม่ถือเป็นข้อมูลลับ ใช้ซ้ำได้ตามปกติ</li>
+    </ul>
+  </div>
+
+  <footer class="meta">อ้างอิงจากการทดสอบจริงกับฟีเจอร์จำลอง "Discount Code Application" — QA Pipeline ทั้ง 15 Skill ผ่านการรันจริงแล้วอย่างน้อย 1 รอบ ณ 2026-09-16</footer>
+
+</div>
+</body>
+</html>
