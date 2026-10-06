@@ -2,9 +2,45 @@
 
 [English](README.md) | **ภาษาไทย**
 
+![Skills](https://img.shields.io/badge/Skills-15-0f766e?style=flat-square)
+![Playwright](https://img.shields.io/badge/Automation-Playwright-2EAD33?style=flat-square&logo=playwright&logoColor=white)
+![Redmine](https://img.shields.io/badge/Defect%20Tracking-Redmine-B32024?style=flat-square&logo=redmine&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3-3776AB?style=flat-square&logo=python&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+
 15 Skill ที่ทำงานต่อเนื่องกัน ตั้งแต่รวบรวม Requirement จนถึงปิด Ticket ใน Redmine หลังแก้บั๊ก ใช้เป็น Framework อ้างอิงเมื่อเริ่มทดสอบฟีเจอร์ใหม่ ทุก Skill ผ่านการรันจริงครบทั้งสายกับฟีเจอร์ตัวอย่าง "Newsletter Email Subscription" มาแล้วอย่างน้อย 1 รอบเต็ม (รวม Redmine จริง — ดู [`examples/newsletter-email-subscription/`](./examples/newsletter-email-subscription/))
 
 **สรุป**: 15 Stage / 4 Phase เรียงเส้นตรง ยกเว้น Phase สุดท้ายวนซ้ำได้ · เกือบทั้งหมดอัตโนมัติ มีเพียง 3 จุดที่ต้องรอคนอนุมัติ (Stage 00-pre, 00, และลายเซ็นใน `08-qa-report.docx`) · Stage 09–10a ต่อ Redmine จริง ต้องขอ URL/API Key ใหม่ทุกครั้ง (ดู [ความปลอดภัย](#ความปลอดภัยของข้อมูลรับรอง))
+
+---
+
+## โปรเจกต์นี้แสดงให้เห็นอะไร
+
+- **กระบวนการ QA ที่ทำซ้ำได้ ไม่ใช่ prompt เป็นครั้ง ๆ:** 15 stage ใน 4 phase แต่ละ stage กำหนดข้อมูลนำเข้า ผลลัพธ์ และจุดตรวจไว้ชัดเจน
+- **ให้คนอนุมัติในจุดที่สำคัญ:** มีเพียง 3 จุดที่ต้องใช้คน (อนุมัติแหล่งข้อมูล, อนุมัติแผนทดสอบ, ลงนามในรายงาน QA) และระบบออกแบบไว้ไม่ให้ระบบอัตโนมัติกรอกแทนคนได้
+- **Traceability:** Requirement Traceability Matrix (RTM) คำนวณใหม่จากไฟล์ต้นทางทุกครั้ง ไม่เชื่อผลจากรอบก่อน
+- **ใช้เครื่องมือจริง มีหลักฐานจริง:** ตัวอย่างรัน Playwright จริง เปิดและปิด Ticket ใน Redmine จริง ส่งอีเมลแจ้งเตือนจริง พร้อมภาพหน้าจอในทุกจุดที่แตะระบบภายนอก
+- **ความปลอดภัยของ credential:** Redmine URL / API key และ SMTP credential ถูกขอใหม่ทุกครั้งที่รัน ส่งผ่าน environment variable เท่านั้น และไม่เขียนลงไฟล์
+
+## ตัวอย่างที่รันจริง
+
+[`examples/newsletter-email-subscription/`](examples/newsletter-email-subscription/) รันครบทั้ง 15 stage กับฟีเจอร์เล็ก ๆ 1 ฟีเจอร์ (สมัครรับข่าวสารที่ Footer ของเว็บ)
+
+| | |
+| :--- | :--- |
+| Test case | 11 เคส (TC-001 – TC-011) |
+| ผล Automation | ผ่าน 10 ไม่ผ่าน 1 (TC-005 ซึ่ง automation ตรวจพบเอง) |
+| วงจรบั๊ก | เปิด Ticket ใน Redmine → Dev แก้ → Retest ผ่าน → ปิด Ticket |
+| ผลรายงาน QA | Conditional Go (ไม่มี P0 Fail แต่มี P1 Fail 1 เคส) ก่อนแก้ |
+| Browser | Chromium เท่านั้น (ดูข้อจำกัดด้านล่าง) |
+
+**ข้อจำกัด ที่ระบุไว้ตรง ๆ**
+
+- ฟีเจอร์ที่ใช้ทดสอบเป็น **ของจำลอง:** สร้างเว็บเดโม Flask (`automation/demo-app/server.py`) ตาม Business Rule โดยฝังบั๊กไว้ 1 จุดตั้งใจ (BR-002) ผล Pass/Fail มาจากการรันทดสอบจริงกับเว็บนี้ แต่ไม่ใช่ระบบ production
+- การทดสอบข้าม Browser (TC-009) วางแผนไว้ 4 Browser แต่เครื่องที่ใช้รันมีแค่ Chromium จึงรายงาน Stage 06a และ 07 ว่า **Complete (Partial)** ไม่ปิดบังข้อจำกัดนี้
+- Redmine ที่ใช้เป็น workspace บน Planio ที่สร้างไว้ใช้กับตัวอย่างนี้เท่านั้น
+
+> หมายเหตุ: ไฟล์นิยาม Skill (`skills/*/SKILL.md`) เขียนเป็นภาษาไทย และเขียนให้ใช้ได้ทั้งกับ Claude และ Gemini โดยไม่อ้างชื่อ tool เฉพาะของแพลตฟอร์ม
 
 ---
 
@@ -166,3 +202,13 @@ Feature จะปิดสมบูรณ์ได้ต่อเมื่อค
 4. ช่องลงนาม QA Lead และ PM/Product Owner ใน `08-qa-report.docx` ลงนามจริงแล้ว
 
 ข้อ 3–4 ต้องผ่านการกระทำของบุคคลจริงเสมอ ไม่มีกลไกให้ระบบอัตโนมัติทำแทนได้
+
+---
+
+## สัญญาอนุญาต
+
+เผยแพร่ภายใต้ [MIT License](LICENSE)
+
+## ผู้พัฒนา
+
+**จิรภัทร จิรมณฑล (Jirapat Jiramonthon)** — [GitHub @Jiramonthon-j](https://github.com/Jiramonthon-j) · [LinkedIn](https://www.linkedin.com/in/jirapat-jiramonthon-930240395)
