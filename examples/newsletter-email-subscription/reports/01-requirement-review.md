@@ -5,7 +5,7 @@
 Feature: Newsletter Email Subscription
 Feature Branch: -
 Created: 2026-09-19
-Deadline: 2026-10-03 (2 สัปดาห์จากวันวิเคราะห์ — ผู้ใช้ให้ผมเลือกวันสมมติเองได้ เนื่องจากเป็น Feature ตัวอย่างและไม่มีค่านี้ในเอกสารต้นทาง)
+Deadline: 2026-10-03 (2 สัปดาห์จากวันวิเคราะห์ — เป็นวันสมมติ เนื่องจากเป็น Feature ตัวอย่างและไม่มีค่านี้ในเอกสารต้นทาง)
 Status: Needs Clarification
 
 ## QA Review Report

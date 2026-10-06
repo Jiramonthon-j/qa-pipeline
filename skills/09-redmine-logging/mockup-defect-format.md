@@ -1,6 +1,6 @@
 # Mockup — Format ของ Defect Ticket ที่จะเปิดใน Redmine
 
-ก่อนเริ่มออกแบบ มีจุดหนึ่งที่ต้องเช็คกับคุณก่อน: **Redmine มี text formatting 2 แบบ** คือ Textile (ค่าเริ่มต้นของ Redmine ส่วนใหญ่) กับ Markdown (บาง instance ตั้งค่าเปลี่ยนไปใช้) — วิธีทำตัวหนา/หัวข้อ/list เขียนไม่เหมือนกัน (Textile ใช้ `*text*` ตัวหนา, Markdown ใช้ `**text**`) ถ้าใช้ syntax ผิดฝั่ง Ticket ที่เปิดจะมีเครื่องหมายดอกจันเพี้ยนๆ ปนอยู่ในเนื้อหาแทนที่จะ render สวยๆ — ด้านล่างนี้ผมร่างเป็น 2 เวอร์ชันไว้ให้ดูเทียบกัน (Mockup นี้ใช้ syntax แบบ **Markdown**) บอกผมด้วยว่า Redmine ของคุณใช้แบบไหน
+ข้อควรรู้ก่อนเปิด Ticket: **Redmine มี text formatting 2 แบบ** คือ Textile (ค่าเริ่มต้นของ Redmine ส่วนใหญ่) กับ Markdown (บาง instance ตั้งค่าเปลี่ยนไปใช้) — วิธีทำตัวหนา/หัวข้อ/list เขียนไม่เหมือนกัน (Textile ใช้ `*text*` ตัวหนา, Markdown ใช้ `**text**`) ถ้าใช้ syntax ผิดฝั่ง Ticket ที่เปิดจะมีเครื่องหมายดอกจันเพี้ยนๆ ปนอยู่ในเนื้อหาแทนที่จะ render สวยๆ — Mockup ด้านล่างใช้ syntax แบบ **Markdown** ก่อนใช้งานจริงให้ตรวจว่า Redmine ปลายทางตั้งค่าเป็นแบบไหน
 
 ---
 

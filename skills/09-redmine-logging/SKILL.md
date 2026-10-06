@@ -136,7 +136,7 @@ python3 scripts/create_redmine_issues.py create --cases-json "<path>.json" --pro
 (ใส่ `--only` เฉพาะตอนเลือก Action (2); ไม่ใส่ = สร้างให้ทุกเคสที่ยังไม่มี Issue link ตาม Action (1) — ตั้ง `REDMINE_URL`/`REDMINE_API_KEY` เป็น environment variable ก่อนรันบรรทัดนี้เสมอตามขั้นตอนที่ 3)
 
 อ่านผลลัพธ์ที่ได้ (`created`/`skipped`/`failed`) แล้วรายงานให้ผู้ใช้ทราบครบทุกกรณี **ไม่ใช่แค่กรณีที่สำเร็จ**:
-- ถ้ามี `failed` (เช่น เชื่อมต่อ Redmine ไม่ได้, Project/Tracker ผิด, สิทธิ์ API Key ไม่พอ) ให้แจ้งข้อความ error จริงที่ได้กลับมา ห้ามสรุปเอาเองว่า "สำเร็จ" ทั้งที่มีบางเคส fail — โดยเฉพาะถ้า error มีคำว่า "403"/"Forbidden" จาก proxy (ไม่ใช่จาก Redmine เอง) ให้สงสัยไว้ก่อนว่าอาจเป็นเพราะ network egress ของ environment ที่รัน Skill นี้ยังไม่ได้ allowlist โดเมนของ Redmine ไว้ (ปัญหาประเภทเดียวกับที่เคยเจอตอนพยายามติดตั้ง Playwright/WebKit ในเซสชันนี้) — แจ้งผู้ใช้ตรงๆ ว่าอาจต้อง allowlist โดเมนก่อน ไม่ใช่เดาสาเหตุอื่น
+- ถ้ามี `failed` (เช่น เชื่อมต่อ Redmine ไม่ได้, Project/Tracker ผิด, สิทธิ์ API Key ไม่พอ) ให้แจ้งข้อความ error จริงที่ได้กลับมา ห้ามสรุปเอาเองว่า "สำเร็จ" ทั้งที่มีบางเคส fail — โดยเฉพาะถ้า error มีคำว่า "403"/"Forbidden" จาก proxy (ไม่ใช่จาก Redmine เอง) ให้สงสัยไว้ก่อนว่าอาจเป็นเพราะ network egress ของ environment ที่รัน Skill นี้ยังไม่ได้ allowlist โดเมนของ Redmine ไว้ (เช่น network allowlist ของ environment บล็อกโดเมน) — แจ้งผู้ใช้ตรงๆ ว่าอาจต้อง allowlist โดเมนก่อน ไม่ใช่เดาสาเหตุอื่น
 - ถ้ามี `skipped` ให้แจ้งว่าข้ามเพราะมี Issue link อยู่แล้ว (ไม่ใช่ error)
 
 ## ขั้นตอนที่ 5 — บันทึกกลับเข้า Workbook และอัปเดต Manifest
