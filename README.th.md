@@ -14,6 +14,10 @@
 
 ---
 
+<p align="center">
+  <a href="docs/images/qa-pipeline-flow-th.png"><img src="docs/images/qa-pipeline-flow-th.png" alt="แผนภาพ QA Pipeline" width="100%" /></a>
+</p>
+
 ## โปรเจกต์นี้แสดงให้เห็นอะไร
 
 - **กระบวนการ QA ที่ทำซ้ำได้ ไม่ใช่ prompt เป็นครั้ง ๆ:** 15 stage ใน 4 phase แต่ละ stage กำหนดข้อมูลนำเข้า ผลลัพธ์ และจุดตรวจไว้ชัดเจน
@@ -92,60 +96,7 @@
 
 ## แผนภาพกระบวนการ
 
-```mermaid
-flowchart TD
-    subgraph A["Phase A — วิเคราะห์ Requirement"]
-        direction TB
-        A1["00-pre · source-ingest<br/>รวบรวม Requirement ต้นทาง"]:::gate
-        A2["00 · test-plan<br/>วางแผนการทดสอบ"]:::gate
-        A3["01 · requirement-review<br/>สกัด Business Rule"]:::auto
-        A4["02 · e2e-flow-designer<br/>ออกแบบ User Flow"]:::auto
-        A5["03 · test-case-generator<br/>สร้าง Test Case"]:::auto
-        A6["04 · coverage-review<br/>ตรวจความครบถ้วน"]:::auto
-        A7["05 · risk-analysis<br/>จัดลำดับความสำคัญ"]:::auto
-        A1 --> A2 --> A3 --> A4 --> A5 --> A6 --> A7
-    end
-
-    subgraph B["Phase B — เตรียมข้อมูลและรันทดสอบจริง"]
-        direction TB
-        B1["06 · test-data-generator<br/>สร้างข้อมูลทดสอบ"]:::auto
-        B2["06a · qa-automation-script<br/>รัน Automation จริง"]:::auto
-        B3["07 · result-analysis<br/>สรุปผลและ Root Cause"]:::auto
-        B4["RTM · qa-reconcile<br/>Traceability Matrix"]:::auto
-        B1 --> B2 --> B3 --> B4
-    end
-
-    subgraph C["Phase C — สรุปผลและตัดสินใจ"]
-        direction TB
-        C1["08 · qa-report-generator<br/>สรุป Go / No-Go"]:::gate
-        C2{"มี Test Case Fail ค้างหรือไม่"}
-        C1 --> C2
-    end
-
-    subgraph D["Phase D — ปิดบั๊ก (วนซ้ำ)"]
-        direction TB
-        D1["09 · redmine-logging<br/>เปิด Ticket"]:::auto
-        D2["10 · qa-retest<br/>Retest หลังแก้ไข"]:::auto
-        D3["10a · qa-retest-closure<br/>ปิด / คอมเมนต์ Ticket"]:::auto
-        D1 --> D2 --> D3
-        D3 -. "ยังมี Fail เหลือ" .-> D1
-    end
-
-    A7 --> B1
-    B4 --> C1
-    C2 -- "ไม่มี" --> DONE(["ปิด Feature ได้"])
-    C2 -- "มี" --> D1
-    D3 -- "Pass ครบทุกเคส" --> DONE
-
-    classDef auto fill:#eef5f3,stroke:#0f766e,color:#0b3630,stroke-width:1px;
-    classDef gate fill:#faf0dd,stroke:#b45309,color:#4a2e04,stroke-width:1.5px;
-    classDef terminal fill:#e7f4ea,stroke:#15803d,color:#0d3a1f,stroke-width:1.5px;
-    class DONE terminal;
-```
-
-สีเขียวอ่อน = อัตโนมัติทั้งหมด · สีน้ำตาลอ่อน = ต้องอนุมัติ/ลงนามจากคนก่อนถือว่าเสร็จ
-
-ดูแผนภาพนี้แบบ standalone (ไฟล์ HTML เดี่ยว ไม่ต้องพึ่ง Mermaid renderer ของ GitHub) ได้ที่
+แผนภาพเต็มอยู่ด้านบนสุดของหน้านี้ ดูแผนภาพนี้แบบ standalone (ไฟล์ HTML เดี่ยว ไม่ต้องพึ่ง Mermaid renderer ของ GitHub) ได้ที่
 [`docs/qa-pipeline-flow.html`](./docs/qa-pipeline-flow.html)
 
 ---

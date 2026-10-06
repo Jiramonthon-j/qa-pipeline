@@ -14,6 +14,10 @@ A set of **15 AI-agent skills** that take one feature through the whole QA lifec
 
 ---
 
+<p align="center">
+  <a href="docs/images/qa-pipeline-flow-en.png"><img src="docs/images/qa-pipeline-flow-en.png" alt="QA Pipeline flow" width="100%" /></a>
+</p>
+
 ## What this project demonstrates
 
 - **A repeatable QA process, not one-off prompts:** 15 stages in 4 phases, each with defined inputs, outputs and gates.
@@ -71,55 +75,7 @@ A set of **15 AI-agent skills** that take one feature through the whole QA lifec
 
 \* Stages 09, 10 and 10a need a Redmine URL and API key from the user on every run.
 
-### Flow
-
-```mermaid
-flowchart TD
-    subgraph A["Phase A — Analyse requirements"]
-        direction TB
-        A1["00-pre · source-ingest"]:::gate
-        A2["00 · test-plan"]:::gate
-        A3["01 · requirement-review"]:::auto
-        A4["02 · e2e-flow-designer"]:::auto
-        A5["03 · test-case-generator"]:::auto
-        A6["04 · coverage-review"]:::auto
-        A7["05 · risk-analysis"]:::auto
-        A1 --> A2 --> A3 --> A4 --> A5 --> A6 --> A7
-    end
-    subgraph B["Phase B — Prepare and execute"]
-        direction TB
-        B1["06 · test-data-generator"]:::auto
-        B2["06a · qa-automation-script"]:::auto
-        B3["07 · result-analysis"]:::auto
-        B4["RTM · qa-reconcile"]:::auto
-        B1 --> B2 --> B3 --> B4
-    end
-    subgraph C["Phase C — Report and decide"]
-        direction TB
-        C1["08 · qa-report-generator"]:::gate
-        C2{"Any failed test cases?"}
-        C1 --> C2
-    end
-    subgraph D["Phase D — Close defects (loops)"]
-        direction TB
-        D1["09 · redmine-logging"]:::auto
-        D2["10 · qa-retest"]:::auto
-        D3["10a · qa-retest-closure"]:::auto
-        D1 --> D2 --> D3
-        D3 -. "failures remain" .-> D1
-    end
-    A7 --> B1
-    B4 --> C1
-    C2 -- "no" --> DONE(["Feature can be closed"])
-    C2 -- "yes" --> D1
-    D3 -- "all pass" --> DONE
-    classDef auto fill:#eef5f3,stroke:#0f766e,color:#0b3630,stroke-width:1px;
-    classDef gate fill:#faf0dd,stroke:#b45309,color:#4a2e04,stroke-width:1.5px;
-    classDef terminal fill:#e7f4ea,stroke:#15803d,color:#0d3a1f,stroke-width:1.5px;
-    class DONE terminal;
-```
-
-Green = fully automatic. Amber = needs a person's approval or signature. A standalone HTML version is in [`docs/qa-pipeline-flow.html`](docs/qa-pipeline-flow.html).
+The full flow diagram is at the top of this page; an interactive HTML version is in [`docs/qa-pipeline-flow.html`](docs/qa-pipeline-flow.html).
 
 ---
 
